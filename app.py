@@ -142,9 +142,10 @@ def Keyboard():
 
 @app.route('/message', methods=['POST'])
 def message():  
-    now = datetime.datetime.now()
     
     global mealDay, behave, now, instruct, schedule, URL, a1
+    
+    now = datetime.datetime.now()
     
     dataReceive = request.get_json()
     content = dataReceive['userRequest']['utterance']
