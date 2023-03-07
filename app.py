@@ -158,12 +158,7 @@ def message():
     #content = dataReceive['content']
     
     print("아래 :",content)
-    print(type(content))
-    
-    print("아래 :",dataReceive)
-    print(type(dataReceive))
-    print(behave)
-    
+    print(type(content)) 
     
     if content == u"오늘":
         response = jsonChoiceParse
