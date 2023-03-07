@@ -6,7 +6,7 @@ import json
 
 now = datetime.datetime.now()
 
-application = Flask(__name__)
+app = Flask(__name__)
 
 schulCode = "P100000425"
 schulname = "전주신흥고등학교" #사이트 학교알리미에서 받아옴
@@ -132,7 +132,7 @@ instruct ="""명령어 목록입니다.
 '급식'이 들어간 채팅을 쳐 원하는 요일이나 오늘의 급식 메뉴를 확인할 수 있습니다.
 """
 
-@application.route('/keyboard')
+@app.route('/keyboard')
 
 def Keyboard():
 
@@ -140,7 +140,7 @@ def Keyboard():
 
 
 
-@application.route('/message', methods=['POST'])
+@app.route('/message', methods=['POST'])
 def message():  
     
     global mealDay, behave, now, instruct, schedule, URL, a1
@@ -357,7 +357,7 @@ def message():
     return jsonify(response)
 
 
-#2023.3.01.content인식오류 발생함. 이거 해결해야함.
+#2023.3.01.content인식오류 발생함. 이거 해결해야함. 해결
 
 if __name__ == '__main__':
-    application.run(host = '0.0.0.0', port = 5000, debug=True)
+    app.run(host = '0.0.0.0', port = 5000, debug=True)
