@@ -88,6 +88,9 @@ schedule = [
     "금요일\n 1교시 : 2학년 선택과목 A\n 2교시 : 문학\n 3교시 : 수학 Ⅰ\n 4교시 : 연극\n 5교시 : 창체\n6교시 : 창체\n7교시 : 창체\n"
 ]
 
+classpos = [
+]
+
 
 jsonChoiceDay = {
     "version": "2.0",
@@ -143,7 +146,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1
+    global mealDay, behave, now, instruct, schedule, URL, a1, classpos
     
     now = datetime.datetime.now()
     
@@ -192,16 +195,26 @@ def message():
             }
         }
         behave = 0
-            
-        
-    elif behave == 6 and (content == "일주일 시간표"):
+       
+    elif content == "강의실":
         response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{schedule[0]}\n{schedule[1]}\n{schedule[2]}\n{schedule[3]}\n{schedule[4]}"}}
+                "outputs" : [{"simpleText" : {"text" : f"{classpos}"}}
                 ]
             }
         }
+        
+    elif behave == 6 and (content == "일주일 시간표"):
+        response = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": f"{schedule[0]}\n{schedule[1]}\n{schedule[2]}\n{schedule[3]}\n{schedule[4]}"}}],
+                 "quickReplies": [
+                                  {"label": "강의실 출력하기", "action": "message", "messageText": "강의실"},
+                                  {"label": "끝내기", "action": "message", "messageText": "끝내기"}
+                                  ]
+                 }
+}
         behave = 0
 
     elif content == u"월":
