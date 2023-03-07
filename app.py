@@ -302,7 +302,7 @@ def message():
                 ]
             }
         }
-    elif (content in u"명령어") or content == "명령어":
+    elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
         behave = 0
         response = {
     "version": "2.0",
