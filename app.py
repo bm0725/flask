@@ -1,9 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import sys
 from flask import Flask, jsonify, request
 import datetime
-import os
 import json
 
 now = datetime.datetime.now()
