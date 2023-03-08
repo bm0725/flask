@@ -178,6 +178,7 @@ def message():
         
         
     elif behave == 6 and (content == "오늘 시간표"):
+        now = datetime.datetime.now()
         if int(now.isoweekday()) > 4:
             response = {
             "version" : "2.0",
@@ -294,6 +295,7 @@ def message():
         
     elif (content in "급식 메뉴") or (content in "급식메뉴") or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
         response = jsonChoiceDay
+        now = datetime.datetime.now()
         schulDate = f"{now.year}.{now.month}.{now.day}"
         URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
     
