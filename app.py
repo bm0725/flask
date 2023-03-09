@@ -52,7 +52,7 @@ def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
     weekday = int(weekday)
     weekdaynow = now.isoweekday()
     if weekdaynow == weekday:
-        mealDay = int(now.day)
+        mealDay = int(now.day - 1)
     else:
         if weekdaynow > weekday :
             mealDay = int(now.day) - (weekdaynow - weekday)
@@ -291,6 +291,7 @@ def message():
             }
     }
         behave = 0
+        menuText = []
         print(menu)
         
     elif (content in "급식 메뉴") or (content in "급식메뉴") or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
