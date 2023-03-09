@@ -43,7 +43,7 @@ def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가�
     menu = menu.split("\n")
     remove = {'', ' '}
     menu = [i for i in menu if i not in remove] #잡코드 정리
-    print(menu)
+    #print(menu)
     return menu 
 
 def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
