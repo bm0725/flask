@@ -14,8 +14,8 @@ schulKndScCode= "04"
 schulCrseScCode = "4"
 schulGion = "stu.jbe.go.kr"
 schulMeal = "1"
-#이것들을 수정하면 원하는 식단 가져올수있음.다른학교도
-menu = []
+#이것들을 수정하면 다른 학교의 식단 파싱도 가능하다.
+menu = [] #이곳에 메뉴를 넣는다.
 
 menuText = ' '
 
@@ -23,7 +23,7 @@ print(now.day, now.isoweekday())
 print(type(now.day),type(now.isoweekday()))
 
 behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 시간표, 4는 수행출력, 5는 급식 선택, 6은 jsonchoicedata
-mealDay = 0 #급식파싱할때 쓸거
+mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
     
 schulDate = f"{now.year}.{now.month}.{now.day}"
 
@@ -63,7 +63,7 @@ def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
         
     return mealDay, behave
 
-def Menutrim(menu, mealDay):
+def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. 알레르기 정보를 전부 떼서 없앤다.
     
     global menuText
     c = menu[mealDay]
@@ -171,10 +171,11 @@ def message():
     elif behave == 5:
         a1 = content.split('.')
         print(a1)
-        schulDate = f"{now.year}.{a1[0]}.{a1[1]}"
+        schulDate = f"{now.year}.{a1[0]}.{a1[1]}" #
         behave = 1
         URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
         response = jsonChoiceParse
+        #URL = 에서 급식을 파싱할때 날짜가 변할 수 있으므로 현재 날짜로 바꿔 출력한다.
         
         
     elif behave == 6 and (content == "오늘 시간표"):
@@ -183,7 +184,7 @@ def message():
             response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : "오늘은 수업이 진행되지 않습니다.."}}
+                "outputs" : [{"simpleText" : {"text" : "오늘은 수업이 진행되지 않습니다.."}} # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
                 ]
             }
         }
@@ -191,7 +192,7 @@ def message():
             response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{schedule[now.isoweekday()]}"}}
+                "outputs" : [{"simpleText" : {"text" : f"{schedule[(now.isoweekday()-1)]}"}} #달력과 다르게 리스트는 0부터 시작하므로 -1을 해줘야 한다.
                 ]
             }
         }
@@ -293,6 +294,7 @@ def message():
         behave = 0
         menuText = []
         print(menu)
+        menu = []
         
     elif (content in "급식 메뉴") or (content in "급식메뉴") or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
         response = jsonChoiceDay
