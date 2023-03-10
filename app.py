@@ -21,7 +21,7 @@ menuText = ' '
 
 ID = ""#리로스쿨 일정파싱용 운영자 ID, 비번. /개발자명령어를 입력해 수정가능.
 PS = ""
-password
+password = "chatbot206"
 
 print(now.day, now.isoweekday())
 print(type(now.day),type(now.isoweekday()))
@@ -171,8 +171,18 @@ def message():
     if content == u"오늘":
         response = jsonChoiceParse
         Weekday(now.isoweekday())
-	elif (behave == 7) and (content == passworld):
 	
+    elif content == password:
+       response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : 
+"""
+가나다라마바사아자
+                """}} # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
+                ]
+            }
+        }
         
     elif behave == 5:
         a1 = content.split('.')
