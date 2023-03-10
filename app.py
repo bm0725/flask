@@ -350,15 +350,6 @@ def message():
                                   ]
                  }
 }
-	elif content = "/개발자명령어"
-		response = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "개발자 전용 비밀번호를 입력해주세요. 잃어버리셨다면 상담원에게 문의해 주세요."}}]
-                                  ]
-                 }
-}
-
-
     elif content == u"안녕":
         response = {
             "version" : "2.0",
