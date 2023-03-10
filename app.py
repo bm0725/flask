@@ -19,10 +19,14 @@ menu = [] #이곳에 메뉴를 넣는다.
 
 menuText = ' '
 
+ID = ""#리로스쿨 일정파싱용 운영자 ID, 비번. /개발자명령어를 입력해 수정가능.
+PS = ""
+password
+
 print(now.day, now.isoweekday())
 print(type(now.day),type(now.isoweekday()))
 
-behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 시간표, 4는 수행출력, 5는 급식 선택, 6은 jsonchoicedata
+behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 시간표, 4는 수행출력, 5는 급식 선택, 6은 jsonchoicedata, 7은 개발자모드(데이터수정)
 mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
     
 schulDate = f"{now.year}.{now.month}.{now.day}"
@@ -167,6 +171,8 @@ def message():
     if content == u"오늘":
         response = jsonChoiceParse
         Weekday(now.isoweekday())
+	elif (behave == 7) and (content == passworld):
+	
         
     elif behave == 5:
         a1 = content.split('.')
@@ -334,6 +340,14 @@ def message():
                                   ]
                  }
 }
+	elif content = "/개발자명령어"
+		response = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "개발자 전용 비밀번호를 입력해주세요. 잃어버리셨다면 상담원에게 문의해 주세요."}}]
+                                  ]
+                 }
+}
+
 
     elif content == u"안녕":
         response = {
