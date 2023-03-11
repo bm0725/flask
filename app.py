@@ -150,7 +150,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText
+    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu
     
     now = datetime.datetime.now()
     
