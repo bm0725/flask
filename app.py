@@ -8,7 +8,7 @@ now = datetime.datetime.now()
 
 app = Flask(__name__)
 
-schulCode = "P100000425"
+schulCode = "P100000425" #학교코드
 schulname = "전주신흥고등학교" #사이트 학교알리미에서 받아옴
 schulKndScCode= "04"
 schulCrseScCode = "4"
@@ -31,8 +31,8 @@ mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
     
 schulDate = f"{now.year}.{now.month}.{now.day}"
 
-
 URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
+
 
 
 
@@ -49,6 +49,10 @@ def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가�
     menu = [i for i in menu if i not in remove] #잡코드 정리
     #print(menu)
     return menu 
+
+def ParsingRiro(url2):#리로스쿨 학사일정 가져오기. 리로스쿨은 로그인필요해 id랑 PS로 로그인해 파싱.
+    global ID, PS
+    
 
 def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
     global mealDay, behave
@@ -72,16 +76,21 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
     global menuText
     c = menu[mealDay]
     c = c.split('.')
+    print(c)
     
     remove = {'1', '2' , '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'}
     c = [i for i in c if i not in remove]
     i = 0
-    while True:
-        blank = c[i][:-1]
-        menuText += f"{blank}\n"
-        i = i + 1
-        if len(c) == i + 1:
-            break
+    if (len(c) == 0) or (len(c) == 1):
+        mealDay += 1
+        menuText = f"{mealDay}일은 급식을 제공하지 않습니다."
+    else:
+    	while True:
+        	blank = c[i][:-1]
+        	menuText += f"{blank}\n"
+        	i = i + 1
+        	if len(c) == i + 1:
+            		break
     return menuText
 
 schedule = [
@@ -99,6 +108,20 @@ classpos = [
 jsonChoiceDay = {
     "version": "2.0",
     "template": {"outputs": [{"simpleText": {"text": "날짜를 선택해 주세요. 이번주 해당 요일의 급식이 출력됩니다."}}],
+                 "quickReplies": [{"label": "오늘", "action": "message", "messageText": "오늘"},
+                                  {"label": "월", "action": "message", "messageText": "월"},
+                                  {"label": "화", "action": "message", "messageText": "화"},
+                                  {"label": "수", "action": "message", "messageText": "수"},
+                                  {"label": "목", "action": "message", "messageText": "목"},
+                                  {"label": "금", "action": "message", "messageText": "금"},
+                                  {"label": "사용자 지정", "action": "message", "messageText": "사용자 지정"}
+                                  ]
+                 }
+}
+
+jsonChoiceMonth = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "어떤 월의 학사일정을 가져오시겠어요?"}}],
                  "quickReplies": [{"label": "오늘", "action": "message", "messageText": "오늘"},
                                   {"label": "월", "action": "message", "messageText": "월"},
                                   {"label": "화", "action": "message", "messageText": "화"},
@@ -150,7 +173,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu
+    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth
     
     now = datetime.datetime.now()
     
@@ -173,12 +196,14 @@ def message():
         Weekday(now.isoweekday())
 	
     elif content == password:
-       response = {
+        response = {
             "version" : "2.0",
             "template" : {
                 "outputs" : [{"simpleText" : {"text" : 
 """
-가나다라마바사아자
+아래는 데이터 수정및 주요 내용에 접근할 수 있는 명령어들입니다.
+/시간표정보수정 ->
+/
                 """}} # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
                 ]
             }
@@ -213,8 +238,15 @@ def message():
             }
         }
         behave = 0
-       
-    elif content == "강의실":
+    
+    elif (content == "학사일정 확인하기") or (content in "학사일정"): #학사일정 파싱시작. 몇달치 가져올건지 물어봄
+        response = jsonChoiceMonth
+        behave = 2
+        
+    elif (content == "1") and (behave == 2):  #각 달마다 링크 달라짐.
+        pass
+        
+    elif content == "강의실": #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         response = {
             "version" : "2.0",
             "template" : {
@@ -308,7 +340,7 @@ def message():
             }
     }
         behave = 0
-        menuText = []
+        menuText = ' '#메뉴텍스트는 리스트 아님 주의.
         print(menu)
         menu = []
         
