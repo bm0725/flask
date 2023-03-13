@@ -83,7 +83,7 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
     i = 0
     if (len(c) == 0) or (len(c) == 1):
         mealDay += 1
-        menuText = f"{mealDay}일은 급식을 제공하지 않습니다."
+        menuText = f"{mealDay}일은 급식을 제공하지 않습니다ㅋㅋ."
     else:
     	while True:
         	blank = c[i][:-1]
@@ -91,6 +91,7 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
         	i = i + 1
         	if len(c) == i + 1:
             		break
+    	mealDay =+ 1
     return menuText
 
 schedule = [
