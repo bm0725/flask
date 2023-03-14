@@ -315,7 +315,8 @@ def message():
         behave = 0
         
     elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
-        response ={ "verson" : "2.0",
+        response = {
+    "verson" : "2.0",
     "template": {"outputs": [{"simpleText": {"text": f"언제의 2학년 6반 시간표를 원하십니까? 강의실 정보도 같이 출력됩니다."}}],
                  "quickReplies": [
                                   {"label": "일주일 전체", "action": "message", "messageText": "일주일 시간표"},
@@ -326,9 +327,11 @@ def message():
         behave = 6
     
     elif content == "추가 명령어":
-        response ={ "verson" : "2.0",
+        response = {
+    "verson" : "2.0",
     "template": {"outputs": [{"simpleText": {"text": 
-"""명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
+"""
+명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
 """
 }}]
                  }
