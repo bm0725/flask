@@ -211,6 +211,7 @@ def message():
     global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase
     
     now = datetime.datetime.now()
+    print(now.day)
     
     dataReceive = request.get_json()
     content = dataReceive['userRequest']['utterance']
@@ -304,11 +305,11 @@ def message():
         
     elif behave == 6 and (content == "일주일 시간표"):
         response = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": f"{schedule[0]}\n{schedule[1]}\n{schedule[2]}\n{schedule[3]}\n{schedule[4]}"}}],
-                 "quickReplies": [
-                                  {"label": "강의실 출력하기", "action": "message", "messageText": "강의실"},
-                                  {"label": "끝내기", "action": "message", "messageText": "끝내기"}
+    "version" : "2.0",
+    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule[0]}\n{schedule[1]}\n{schedule[2]}\n{schedule[3]}\n{schedule[4]}"}}],
+                 "quickReplies" : [
+                                  {"label" : "강의실 출력하기", "action" : "message", "messageText" : "강의실"},
+                                  {"label" : "끝내기", "action" : "message", "messageText" : "끝내기"}
                                   ]
                  }
 }
@@ -317,10 +318,10 @@ def message():
     elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
         response = {
     "verson" : "2.0",
-    "template": {"outputs": [{"simpleText": {"text": f"언제의 2학년 6반 시간표를 원하십니까? 강의실 정보도 같이 출력됩니다."}}],
-                 "quickReplies": [
-                                  {"label": "일주일 전체", "action": "message", "messageText": "일주일 시간표"},
-                                  {"label": "오늘", "action": "message", "messageText": "오늘 시간표"}
+    "template": {"outputs" : [{"simpleText" : {"text" : f"언제의 2학년 6반 시간표를 원하십니까?"}}],
+                 "quickReplies" : [
+                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
+                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
                                   ]
                  }
 }
@@ -329,7 +330,7 @@ def message():
     elif content == "추가 명령어":
         response = {
     "verson" : "2.0",
-    "template": {"outputs": [{"simpleText": {"text": 
+    "template": {"outputs" : [{"simpleText": {"text": 
 """
 명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
 """
