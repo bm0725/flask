@@ -46,21 +46,24 @@ def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가�
     menu = text.get_text()
     menu = menu.split("\n")
     remove = {'', ' '}
-    menu = [i for i in menu if i not in remove] #잡코드 정리
-    #print(menu)
+    menu = [i for i in menu if i not in remove]
     return menu 
 
 def ParsingRiro(url2):#리로스쿨 학사일정 가져오기. 리로스쿨은 로그인필요해 id랑 PS로 로그인해 파싱.
-    global ID, PS
+    global ID, Ps
+    #print(menu)
     
-
-def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
+#https://stu.jbe.go.kr/popup.jsp?page=/ws/edusys/cm/sym/ocm/oi/sym_ocmoi_m02&popupID=20230313184856&w2xHome=/ws/edusys/pa/com/&w2xDocumentRoot= 하굑선택창
+    
+def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일은 1, 화요일은 2,수3,목4,금5,토6,일7임.
     global mealDay, behave
     
     weekday = int(weekday)
     weekdaynow = now.isoweekday()
+    print(",,,,,,,,,,,,,,,,,",weekday,weekdaynow)
     if weekdaynow == weekday:
-        mealDay = int(now.day - 1)
+        mealDay = int(now.day)
+        print(mealDay)
     else:
         if weekdaynow > weekday :
             mealDay = int(now.day) - (weekdaynow - weekday)
@@ -71,10 +74,11 @@ def Weekday(weekday): #급식날짜계산함수. 월이 0 ~ 일이 6
         
     return mealDay, behave
 
+
 def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. 알레르기 정보를 전부 떼서 없앤다.
     
     global menuText
-    c = menu[mealDay]
+    c = menu[(mealDay -1)] #리스트는 0부터 시작하므로
     c = c.split('.')
     print(c)
     
@@ -83,7 +87,7 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
     i = 0
     if (len(c) == 0) or (len(c) == 1):
         mealDay += 1
-        menuText = f"{mealDay}일은 급식을 제공하지 않습니다ㅋㅋ."
+        menuText = f"{mealDay}일은 급식을 제공하지 않습니다."
     else:
     	while True:
         	blank = c[i][:-1]
@@ -91,7 +95,6 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
         	i = i + 1
         	if len(c) == i + 1:
             		break
-    	mealDay =+ 1
     return menuText
 
 schedule = [
@@ -135,17 +138,48 @@ jsonChoiceMonth = {
 }
 
 jsonChoiceBase = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "무엇을 하시겠어요?"}}],
-                 "quickReplies": [
-                                  {"label": "명령어 확인하기", "action": "message", "messageText": "명령어 확인하기"},
-                                  {"label": "급식 메뉴 확인하기", "action": "message", "messageText": "급식 메뉴 확인하기"},
-                                  {"label": "학사일정 확인하기", "action": "message", "messageText": "학사일정 확인하기"},
-                                  {"label": "시간표 확인하기", "action": "message", "messageText": "시간표 확인하기"},
-                                  {"label": "수행평가 확인하기", "action": "message", "messageText": "수행평가 확인하기"},
-                                  {"label": "사용자 지정", "action": "message", "messageText": "사용자 지정"}
-                                  ]
-                 }
+                 "version": "2.0",
+                 "template": {
+                 "outputs": [{
+                     "carousel": { # 스킬가이드에 나온 캐러셀 형태
+                         "type": "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
+                         "items": [{
+                             "title": "명령어 목록.", # 제목
+                             "description": "아래는 사용 가능한 기능들입니다. 기능들을 상세히 알고 싶다면 첫 버튼을 눌러주세요.",
+                             #"thumbnail": { # 썸네일 이미지
+                                 #"imageUrl": can[0].imgurl
+                             "buttons": [ # 버튼
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "명령어 확인하기", # 버튼 이름
+                                 "messageText": "추가 명령어"
+                },
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "급식 메뉴 확인하기",
+                                 "messageText": "급식 메뉴"
+                },
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "시간표 확인하기",
+                                 "messageText": "시간표"
+                },
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "수행평가 확인/추가하기",
+                                 "messageText": "수행평가"
+                },
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "사용자 등록",
+                                 "messageText": "사용자 등록"
+                }]
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
 
 jsonChoiceParse = {
@@ -174,7 +208,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth
+    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase
     
     now = datetime.datetime.now()
     
@@ -203,8 +237,8 @@ def message():
                 "outputs" : [{"simpleText" : {"text" : 
 """
 아래는 데이터 수정및 주요 내용에 접근할 수 있는 명령어들입니다.
-/시간표정보수정 ->
-/
+/시간표정보수정 -> 반의 시간표 정보를 수정할 수 있다.
+/수행평가수정->잘못 추가한 수행평가 정보나, 일부러 추가한 가짜 수행평가 정보를 수정할수 있다.
                 """}} # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
                 ]
             }
@@ -213,10 +247,22 @@ def message():
     elif behave == 5:
         a1 = content.split('.')
         print(a1)
-        schulDate = f"{now.year}.{a1[0]}.{a1[1]}" #
-        behave = 1
-        URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
-        response = jsonChoiceParse
+        if len(a1) == 0:
+            behave = 0
+            response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"형식에 맞춰 주세요. 이번년도 급식 데이터만 가능합니다."}} #달력과 다르게 리스트는 0부터 시작하므로 -1을 해줘야 한다.
+                ]
+            }
+        }
+            mealDay = 0
+        else:
+            mealDay = int(a1[1])
+            schulDate = f"{now.year}.{a1[0]}.{a1[1]}"
+            behave = 1
+            URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
+            response = jsonChoiceParse
         #URL = 에서 급식을 파싱할때 날짜가 변할 수 있으므로 현재 날짜로 바꿔 출력한다.
         
         
@@ -267,26 +313,47 @@ def message():
                  }
 }
         behave = 0
-
+        
+    elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
+        response ={ "verson" : "2.0",
+    "template": {"outputs": [{"simpleText": {"text": f"언제의 2학년 6반 시간표를 원하십니까? 강의실 정보도 같이 출력됩니다."}}],
+                 "quickReplies": [
+                                  {"label": "일주일 전체", "action": "message", "messageText": "일주일 시간표"},
+                                  {"label": "오늘", "action": "message", "messageText": "오늘 시간표"}
+                                  ]
+                 }
+}
+        behave = 6
+    
+    elif content == "추가 명령어":
+        response ={ "verson" : "2.0",
+    "template": {"outputs": [{"simpleText": {"text": 
+"""명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
+"""
+}}]
+                 }
+}
+        #아래는 급식관련내용
+        
     elif content == u"월":
         response = jsonChoiceParse
-        Weekday(0)
+        Weekday(1)
         
     elif content == u"화":
         response = jsonChoiceParse
-        Weekday(1)
+        Weekday(2)
     
     elif content == u"수":
         response = jsonChoiceParse
-        Weekday(2)
+        Weekday(3)
 
     elif content == u"목":
         response = jsonChoiceParse
-        Weekday(3)
+        Weekday(4)
 
     elif content == u"금":
         response = jsonChoiceParse
-        Weekday(4)
+        Weekday(5)
         
     elif content == u"사용자 지정":
         response = {
@@ -297,18 +364,6 @@ def message():
             }
         }
         behave = 5
-        
-    elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
-        response = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": f"언제의 2학년 6반 시간표를 원하십니까? 강의실 정보도 같이 출력됩니다."}}],
-                 "quickReplies": [
-                                  {"label": "일주일 전체", "action": "message", "messageText": "일주일 시간표"},
-                                  {"label": "오늘", "action": "message", "messageText": "오늘 시간표"}
-                                  ]
-                 }
-}
-        behave = 6
         
     elif (content == (u"급식 파싱" or u"급식파싱")) and behave == 1:
         Parsing(URL)
@@ -342,15 +397,17 @@ def message():
     }
         behave = 0
         menuText = ' '#메뉴텍스트는 리스트 아님 주의.
-        print(menu)
         menu = []
+        mealDay = 0
         
     elif (content in "급식 메뉴") or (content in "급식메뉴") or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
         response = jsonChoiceDay
         now = datetime.datetime.now()
         schulDate = f"{now.year}.{now.month}.{now.day}"
         URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
-    
+
+        #아래는 현재작업중단
+        
     elif content == u"취소":
         behave = 0
         response = {
@@ -369,28 +426,28 @@ def message():
                 ]
             }
         }
+        
+        #아래는 수행
+        
+    elif content == "수행평가":
+    	response = {
+            "version" : "2.0",
+            "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다."}}],
+                          "quickReplies": [
+                                  {"label": "수행평가 확인하기", "action": "message", "messageText": "수행 확인"},
+                                  {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
+            }
+    }
+        
+    #아래는 사용자 등록기능
+    
+    elif content == "사용자 등록":
+        pass
+        #아래는 기타
+        
     elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
         behave = 0
-        response = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": f"{instruct}"}}],
-                 "quickReplies": [
-                                  {"label": "명령어 확인하기", "action": "message", "messageText": "명령어 확인하기"},
-                                  {"label": "급식 메뉴 확인하기", "action": "message", "messageText": "급식 메뉴 확인하기"},
-                                  {"label": "학사일정 확인하기", "action": "message", "messageText": "학사일정 확인하기"},
-                                  {"label": "시간표 확인하기", "action": "message", "messageText": "시간표 확인하기"},
-                                  {"label": "수행평가 확인하기", "action": "message", "messageText": "수행평가 확인하기"}
-                                  ]
-                 }
-}
-    elif content == u"안녕":
-        response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : "안녕하세요."}}
-                ]
-            }
-        }
+        response = jsonChoiceBase
 
     elif content == u"시작하기":
          response = {
@@ -411,11 +468,29 @@ def message():
         
     else:
         response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : "이해못했다. ㅇㅇ"}}]
+                 "version": "2.0",
+                 "template": {
+                 "outputs": [{
+                     "carousel": { # 스킬가이드에 나온 캐러셀 형태
+                         "type": "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
+                         "items": [{
+                             "title": "이해하지 못했습니다.", # 제목
+                             "description": "'명렁어'를 입력해 사용가능한 기능들을 확인해주세요.", # 설명
+                             #"thumbnail": { # 썸네일 이미지
+                                 #"imageUrl": can[0].imgurl
+                             "buttons": [ # 버튼
+                {
+                                 "action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "명령어 출력하기", # 버튼 이름
+                                 "messageText": "명령어"
+                }]
             }
+          ]
         }
+      }
+    ]
+  }
+}
 
     return jsonify(response)
 
