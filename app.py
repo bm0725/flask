@@ -4,8 +4,8 @@ from flask import Flask, jsonify, request
 import datetime
 import json
 
-now = datetime.datetime.now().today()
-
+now = datetime.datetime.now()
+now = now + datetime.timedelta(hours=9)
 app = Flask(__name__)
 
 schulCode = "P100000425" #학교코드
