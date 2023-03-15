@@ -211,7 +211,8 @@ def message():
     
     global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase
     
-    now = datetime.datetime.now().today()
+    now = datetime.datetime.now()
+    now = now + datetime.timedelta(hours=9)
     print(now.day)
     
     dataReceive = request.get_json()
@@ -409,7 +410,6 @@ def message():
         
     elif (content in "급식 메뉴") or (content in "급식메뉴") or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
         response = jsonChoiceDay
-        now = datetime.datetime.now().today()
         schulDate = f"{now.year}.{now.month}.{now.day}"
         URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
 
