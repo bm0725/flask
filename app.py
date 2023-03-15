@@ -106,8 +106,22 @@ schedule = [
     "금요일\n 1교시 : 2학년 선택과목 A\n 2교시 : 문학\n 3교시 : 수학 Ⅰ\n 4교시 : 연극\n 5교시 : 창체\n6교시 : 창체\n7교시 : 창체\n"
 ]
 
-classpos = [
-]
+movedata2 = []
+
+schedule2 = { #2학년 학교 시간표. 딕셔너리 형태
+    "1" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "2" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "3" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "4" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "5" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "6" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "7" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "8" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "9" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+	"10" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"]
+}
+
+
 
 
 jsonChoiceDay = {
@@ -139,41 +153,41 @@ jsonChoiceMonth = {
 }
 
 jsonChoiceBase = {
-                 "version": "2.0",
-                 "template": {
-                 "outputs": [{
-                     "carousel": { # 스킬가이드에 나온 캐러셀 형태
-                         "type": "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
-                         "items": [{
-                             "title": "명령어 목록.", # 제목
-                             "description": "아래는 사용 가능한 기능들입니다. 기능들을 상세히 알고 싶다면 첫 버튼을 눌러주세요.",
+                 "version" : "2.0",
+                 "template" : {
+                 "outputs" : [{
+                     "carousel" : { # 스킬가이드에 나온 캐러셀 형태
+                         "type" : "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
+                         "items" : [{
+                             "title" : "명령어 목록.", # 제목
+                             "description" : "아래는 사용 가능한 기능들입니다. 기능들을 상세히 알고 싶다면 첫 버튼을 눌러주세요.",
                              #"thumbnail": { # 썸네일 이미지
                                  #"imageUrl": can[0].imgurl
-                             "buttons": [ # 버튼
+                             "buttons" : [ # 버튼
                 {
-                                 "action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "명령어 확인하기", # 버튼 이름
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "명령어 확인하기", # 버튼 이름
                                  "messageText": "추가 명령어"
                 },
                 {
-                                 "action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "급식 메뉴 확인하기",
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "급식 메뉴 확인하기",
                                  "messageText": "급식 메뉴"
                 },
                 {
-                                 "action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "시간표 확인하기",
-                                 "messageText": "시간표"
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "시간표 확인하기",
+                                 "messageText" : "시간표"
                 },
                 {
-                                 "action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "수행평가 확인/추가하기",
-                                 "messageText": "수행평가"
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "수행평가 확인/추가하기",
+                                 "messageText" : "수행평가"
                 },
                 {
-                                 "action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "사용자 등록",
-                                 "messageText": "사용자 등록"
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "사용자 등록",
+                                 "messageText" : "사용자 등록"
                 }]
             }
           ]
@@ -182,6 +196,50 @@ jsonChoiceBase = {
     ]
   }
 }
+
+jsonChoiceBan = {
+                 "version": "2.0",
+                 "template": {
+                 "outputs": [{
+                     "carousel": { # 스킬가이드에 나온 캐러셀 형태
+                         "type": "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
+                         "items": [{"title": "시간표 반 선택", # 제목
+                             "description": "채팅 대신 버튼을 눌러 몇반의 시간표를 볼 것인지 골라주세요.", # 설명
+                             #"thumbnail": { # 썸네일 이미지
+                                 #"imageUrl": can[0].imgurl
+                             "buttons": [ # 버튼
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "6반", # 버튼 이름
+                                 "messageText": "6"},                       
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "1반", # 버튼 이름
+                                 "messageText": "1"},   
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "2반", # 버튼 이름
+                                 "messageText": "2"},          
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "3반", # 버튼 이름
+                                 "messageText": "3"},             
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "4반", # 버튼 이름
+                                 "messageText": "4"},
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "5반", # 버튼 이름
+                                 "messageText": "5"},           
+                                {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "7반", # 버튼 이름
+                                 "messageText": "7"},
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "8반", # 버튼 이름
+                                 "messageText": "8"},
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "9반", # 버튼 이름
+                                 "messageText": "9"},
+                                 {"action": "message", # 동작 형태(텍스트 출력)
+                                 "label": "10반", # 버튼 이름
+                                 "messageText": "10"}
+                                 
+                             ]}]}}]}}
 
 jsonChoiceParse = {
     "version": "2.0",
@@ -209,7 +267,8 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave
+    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave, jsonChoiceBan, choiceban
+    global movedata2, schedule2
     
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
@@ -232,6 +291,18 @@ def message():
     if content == u"오늘":
         response = jsonChoiceParse
         Weekday(now.isoweekday())
+    
+    elif (content == u"취소") or (content == "끝내기"):
+        behave = 0
+        editbehave = 0
+        response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : "작업이 취소되었습니다."}}
+                ]
+            }
+        }
+
 	
     elif content == password:
         response = {
@@ -240,14 +311,16 @@ def message():
                 "outputs" : [{"simpleText" : {"text" : 
 """
 아래는 데이터 수정및 주요 내용에 접근할 수 있는 명령어들입니다.
-/시간표정보수정 -> 반의 시간표 정보를 수정할 수 있다.
+/시간표수정 -> 반의 시간표 정보를 수정할 수 있다.
+/강의실수정 -> 학년 강의실 정보를 수정할 수 있다. 둘다 지금 2학년전용
 /수행평가수정->잘못 추가한 수행평가 정보나, 일부러 추가한 가짜 수행평가 정보를 수정할수 있다.
                 """}} # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
                 ]
             }
         }
     elif editbehave == 1:
-        pass
+        a1 = content.split('.') #a1은 여기저기서 쓰이는 잡변수
+        schedule2[a1[1]][a1[2] - 1] = f"1교시 : {a1[3]}\n 2교시 : {a1[4]}\n 3교시 : {a1[5]}\n 4교시 : {a1[6]}\n 5교시 : {a1[7]}\n6교시 : {a1[8]}\n7교시 : {a1[9]}\n"
         editbehave = 0
         
     elif behave == 5:
@@ -272,8 +345,25 @@ def message():
         #URL = 에서 급식을 파싱할때 날짜가 변할 수 있으므로 현재 날짜로 바꿔 출력한다.
         
         
-    elif behave == 6 and (content == "오늘 시간표"):
-        if int(now.isoweekday()) > 4:
+    elif behave == 6: #시간표 선택하기
+        choiceban = content #선택한 반 저장
+        response = {
+    "version" : "2.0",
+    "template": {"outputs" : [{"simpleText" : {"text" : f"언제의 시간표를 원하십니까?"}}],
+                 "quickReplies" : [
+                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
+                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
+                                  ]
+                 }
+}
+        behave = 0
+
+    elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
+        response = jsonChoiceBan # 반선택
+        behave = 6
+        
+    elif content == "오늘 시간표":
+    	if int(now.isoweekday()) > 4:
             response = {
             "version" : "2.0",
             "template" : {
@@ -281,14 +371,17 @@ def message():
                 ]
             }
         }
-        else:
+		else:
+            a1 = schedule2[choiceban][int(now.weekday())
             response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{schedule[(now.isoweekday()-1)]}"}} #달력과 다르게 리스트는 0부터 시작하므로 -1을 해줘야 한다.
-                ]
-            }
-        }
+    "version" : "2.0",
+    "template": {"outputs" : [{"simpleText" : {"text" : f"{a1}"}}],
+                 "quickReplies" : [
+                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
+                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
+                                  ]
+                 }
+}
         behave = 0
     
     elif (content == "학사일정 확인하기") or (content in "학사일정"): #학사일정 파싱시작. 몇달치 가져올건지 물어봄
@@ -302,34 +395,21 @@ def message():
         response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{classpos}"}}
+                "outputs" : [{"simpleText" : {"text" : f"{movedata2}"}}
                 ]
             }
         }
         
-    elif behave == 6 and (content == "일주일 시간표"):
+    elif content == "일주일 시간표":
         response = {
     "version" : "2.0",
-    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule[0]}\n{schedule[1]}\n{schedule[2]}\n{schedule[3]}\n{schedule[4]}"}}],
+    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule2[choiceban][0]}\n{schedule[choiceban][1]}\n{schedule[choiceban][2]}\n{schedule[choiceban][3]}\n{schedule[choiceban][4]}"}}],
                  "quickReplies" : [
                                   {"label" : "강의실 출력하기", "action" : "message", "messageText" : "강의실"},
                                   {"label" : "끝내기", "action" : "message", "messageText" : "끝내기"}
                                   ]
                  }
 }
-        behave = 0
-        
-    elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
-        response = {
-    "version" : "2.0",
-    "template": {"outputs" : [{"simpleText" : {"text" : f"언제의 2학년 6반 시간표를 원하십니까?"}}],
-                 "quickReplies" : [
-                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
-                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
-                                  ]
-                 }
-}
-        behave = 6
     
     elif content == "추가 명령어":
         response = {
@@ -412,28 +492,6 @@ def message():
         response = jsonChoiceDay
         schulDate = f"{now.year}.{now.month}.{now.day}"
         URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
-
-        #아래는 현재작업중단
-        
-    elif content == u"취소":
-        behave = 0
-        response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : "작업이 취소되었습니다."}}
-                ]
-            }
-        }
-    elif content == "끝내기":
-        behave = 0
-        response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : "작업이 끝났습니다. 해당 작업을 다시 하고 싶으시다면 '급식 메뉴'와 같이 시작 발화를 입력해주세요."}}
-                ]
-            }
-        }
-        
         #아래는 수행
         
     elif content == "수행평가":
@@ -442,28 +500,60 @@ def message():
             "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다."}}],
                           "quickReplies": [
                                   {"label": "수행평가 확인하기", "action": "message", "messageText": "수행 확인"},
-                                  {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
-            }
+                                 {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
+             }
     }
         
     #아래는 사용자 등록기능
     
     elif content == "사용자 등록":
-        pass
-
-    #아랜 명령어
-
-    elif content == "/시간표정보수정":
         response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : "수정할 반을 입력해주셈"}}]
+                "outputs" : [{"simpleText" : {"text" : "작업이 취소되었습니다."}}
+                ]
             }
         }
+
+    #아랜 명령어
+
+    elif content == "/시간표수정":
+        response = {
+            "version" : "2.0",
+            "template" : {"outputs" : [{"simpleText" : { "text" :
+"""
+수정할 반과 바뀐 시간표내용을 입력해주세요.
+예시, 2학년 6반의 월요일을 수정할때->
+
+주의 : 요일 대신 요일코드를 입력해주세요.
+월요일은 1, 화 : 2, 수 : 3, 목 : 4, 금 : 5
+
+2.6.1.선택과목A.선택과목B.수학.수학.수학.수학.창체
+이 경우 2학년 6반 월요일 1교시 선택B, 마지막 교시 창체. 실수했거나 오류시 상담원에게 물어보세요."""}}],
+                          "quickReplies": [
+                                 {"label": "취소", "action": "message", "messageText": "취소"}]
+             }
+    }
         editbehave = 1
+        
+    elif content == "/백업":
+    	response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"{schedule2},{movedata}"}}]
+            }
+        }
 
         #아래는 기타
-        
+    elif content == "/강의실수정":
+    	response = {
+            "version" : "2.0",
+            "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다."}}],
+                          "quickReplies": [
+                                 {"label": "취소", "action": "message", "messageText": "취소"}]
+             }
+    }
+
     elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
         behave = 0
         response = jsonChoiceBase
@@ -518,3 +608,4 @@ def message():
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000, debug=True)
+    사용자
