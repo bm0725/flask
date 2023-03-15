@@ -28,6 +28,7 @@ print(type(now.day),type(now.isoweekday()))
 
 behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 시간표, 4는 수행출력, 5는 급식 선택, 6은 jsonchoicedata, 7은 개발자모드(데이터수정)
 mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
+editbehave = 0 #데이터수정. 1은 시간표,
     
 schulDate = f"{now.year}.{now.month}.{now.day}"
 
@@ -244,6 +245,9 @@ def message():
                 ]
             }
         }
+    elif editbehave == 1:
+        pass
+        editbehave = 0
         
     elif behave == 5:
         a1 = content.split('.')
@@ -446,6 +450,18 @@ def message():
     
     elif content == "사용자 등록":
         pass
+
+    #아랜 명령어
+
+    elif content == "/시간표정보수정":
+        response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : "수정할 반을 입력해주셈"}}]
+            }
+        }
+        editbehave = 1
+
         #아래는 기타
         
     elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
