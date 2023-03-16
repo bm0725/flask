@@ -15,7 +15,7 @@ schulCrseScCode = "4"
 schulGion = "stu.jbe.go.kr"
 schulMeal = "1"
 #이것들을 수정하면 다른 학교의 식단 파싱도 가능하다.
-menu = [] #이곳에 메뉴를 넣는다.
+menu = [] #이곳에 메뉴를 넣는다.미완성
 
 menuText = ' '
 
@@ -26,7 +26,7 @@ password = "chatbot206"
 print(now.day, now.isoweekday())
 print(type(now.day),type(now.isoweekday()))
 
-behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 시간표, 4는 수행출력, 5는 급식 선택, 6은 jsonchoicedata, 7은 개발자모드(데이터수정)
+behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 강의실,4수행출력, 5는 급식 선택, 6은 시간표 개발자모드(데이터수정)
 mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
 editbehave = 0 #데이터수정. 1은 시간표,
     
@@ -54,7 +54,7 @@ def ParsingRiro(url2):#리로스쿨 학사일정 가져오기. 리로스쿨은 �
     global ID, Ps
     #print(menu)
     
-#https://stu.jbe.go.kr/popup.jsp?page=/ws/edusys/cm/sym/ocm/oi/sym_ocmoi_m02&popupID=20230313184856&w2xHome=/ws/edusys/pa/com/&w2xDocumentRoot= 하굑선택창
+#https://stu.jbe.go.kr/popup.jsp?page=/ws/edusys/cm/sym/ocm/oi/sym_ocmoi_m02&popupID=20230313184856&w2xHome=/ws/edusys/pa/com/&w2xDocumentRoot= 하굑선택창미완성
     
 def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일은 1, 화요일은 2,수3,목4,금5,토6,일7임.
     global mealDay, behave
@@ -77,12 +77,12 @@ def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일�
 
 
 def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. 알레르기 정보를 전부 떼서 없앤다.
-    
+
     global menuText
     c = menu[(mealDay -1)] #리스트는 0부터 시작하므로
     c = c.split('.')
     print(c)
-    
+
     remove = {'1', '2' , '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'}
     c = [i for i in c if i not in remove]
     i = 0
@@ -90,23 +90,40 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
         mealDay += 1
         menuText = f"{mealDay}일은 급식을 제공하지 않습니다."
     else:
-    	while True:
-        	blank = c[i][:-1]
-        	menuText += f"{blank}\n"
-        	i = i + 1
-        	if len(c) == i + 1:
-            		break
+        while True:
+            blank = c[i][:-1]
+            menuText += f"{blank}\n"
+            i += 1
+            if len(c) == i + 1:
+            	break
+    
     return menuText
 
-schedule = [
-    "월요일\n 1교시 : 문학\n 2교시 : 2학년 선택과목 C\n 3교시 : 체육\n 4교시 : 일본어/중국어\n 5교시 : 영어Ⅰ\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 A\n",
-    "화요일\n 1교시 : 문학\n 2교시 : 영어 Ⅰ\n 3교시 : 수학 Ⅰ\n 4교시 : 2학년 선택과목 A\n 5교시 : 일본어/중국어\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 C\n",
-    "수요일\n 1교시 : 2학년 선택과목 B\n 2교시 : 일본어/중국어\n 3교시 : 예배\n 4교시 : 창체\n 5교시 : 수학 Ⅰ\n6교시 : 영어 Ⅰ\n7교시 : 2학년 선택과목 C\n",
-    "목요일\n 1교시 : 2학년 선택과목 C\n 2교시 : 영어 Ⅰ\n 3교시 : 2학년 선택과목 A\n 4교시 : 2학년 선택과목 B\n 5교시 : 연극\n6교시 : 문학\n7교시 : 수학 Ⅰ\n",
-    "금요일\n 1교시 : 2학년 선택과목 A\n 2교시 : 문학\n 3교시 : 수학 Ⅰ\n 4교시 : 연극\n 5교시 : 창체\n6교시 : 창체\n7교시 : 창체\n"
-]
+schedulebackup = []
+movebackup = []
 
-movedata2 = []
+movedata2 = {
+    "물리" : {"A-1" : "","A-2" : '1',"B-1" : "2","B-2" : "3","C-1" : "4","C-2" : "5","D" : "6","E" : "7"},
+    "화학" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "생물" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "지구" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "경제" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "정법" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "사문" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "세계사" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "한국지리" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "영어권문화" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "문학개론" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "확통" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "기하" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "미적" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "일본어" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "중국어" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "연극" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "},
+    "미술" : {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "}
+    
+    
+}
 
 schedule2 = { #2학년 학교 시간표. 딕셔너리 형태
     "1" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
@@ -114,7 +131,11 @@ schedule2 = { #2학년 학교 시간표. 딕셔너리 형태
     "3" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "4" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "5" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
-    "6" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "6" : ["1교시 : 문학\n 2교시 : 2학년 선택과목 C\n 3교시 : 체육\n 4교시 : 일본어/중국어\n 5교시 : 영어Ⅰ\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 A\n",
+           "1교시 : 문학\n 2교시 : 영어 Ⅰ\n 3교시 : 수학 Ⅰ\n 4교시 : 2학년 선택과목 A\n 5교시 : 일본어/중국어\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 C\n",
+           "1교시 : 2학년 선택과목 B\n 2교시 : 일본어/중국어\n 3교시 : 예배\n 4교시 : 창체\n 5교시 : 수학 Ⅰ\n6교시 : 영어 Ⅰ\n7교시 : 2학년 선택과목 C\n",
+           "1교시 : 2학년 선택과목 C\n 2교시 : 영어 Ⅰ\n 3교시 : 2학년 선택과목 A\n 4교시 : 2학년 선택과목 B\n 5교시 : 연극\n6교시 : 문학\n7교시 : 수학 Ⅰ\n",
+           "1교시 : 2학년 선택과목 A\n 2교시 : 문학\n 3교시 : 수학 Ⅰ\n 4교시 : 연극\n 5교시 : 창체\n6교시 : 창체\n7교시 : 창체\n"],
     "7" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "8" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "9" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
@@ -178,6 +199,11 @@ jsonChoiceBase = {
                                  "action" : "message", # 동작 형태(텍스트 출력)
                                  "label" : "시간표 확인하기",
                                  "messageText" : "시간표"
+                },
+                {
+                                 "action" : "message", # 동작 형태(텍스트 출력)
+                                 "label" : "이동수업 위치 확인하기",
+                                 "messageText" : "강의실"
                 },
                 {
                                  "action" : "message", # 동작 형태(텍스트 출력)
@@ -268,7 +294,7 @@ def Keyboard():
 def message():  
     
     global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave, jsonChoiceBan, choiceban
-    global movedata2, schedule2
+    global movedata2, schedule2, schedulebackup, movebackup, editbehave
     
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
@@ -287,6 +313,7 @@ def message():
     
     print("아래 :",content)
     print(type(content)) 
+    print(behave)
     
     if content == u"오늘":
         response = jsonChoiceParse
@@ -304,7 +331,7 @@ def message():
         }
 
 	
-    elif content == password:
+    elif content == password: # 운영자기능 설명
         response = {
             "version" : "2.0",
             "template" : {
@@ -318,12 +345,42 @@ def message():
                 ]
             }
         }
-    elif editbehave == 1:
+    elif editbehave == 1: #시간표수정기능
         a1 = content.split('.') #a1은 여기저기서 쓰이는 잡변수
-        schedule2[a1[1]][a1[2] - 1] = f"1교시 : {a1[3]}\n 2교시 : {a1[4]}\n 3교시 : {a1[5]}\n 4교시 : {a1[6]}\n 5교시 : {a1[7]}\n6교시 : {a1[8]}\n7교시 : {a1[9]}\n"
+        schedulebackup.append(schedule2[a1[1]][int(a1[2]) - 1])
+        schedule2[a1[1]][int(a1[2]) - 1] = f"1교시 : {a1[3]}\n 2교시 : {a1[4]}\n 3교시 : {a1[5]}\n 4교시 : {a1[6]}\n 5교시 : {a1[7]}\n6교시 : {a1[8]}\n7교시 : {a1[9]}\n"
         editbehave = 0
+        response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"수정되었습니다."}} #달력과 다르게 리스트는 0부터 시작하므로 -1을 해줘야 한다.
+                ]
+            }
+        }
+    
+    elif editbehave == 2:
+        movebackup.append(content)
+        a1 = content.split('/','.')
+        while True:
+            i = 0 #반복용잡변수
+            if a1[(i+1)] not in movedata2:
+                movedata2[a1[(i+1)]] = {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "}
+                movedata2[a1[(i+1)]][a1[(i+2)]] = a1[(i + 3)]
+            else:
+                movedata2[a1[(i+1)]][a1[(i+2)]] = a1[(i + 3)]
+            i += 3
+            if len(a1)-1 < i + 3:
+                    break
+        response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"수정되었습니다."}} #달력과 다르게 리스트는 0부터 시작하므로 -1을 해줘야 한다.
+                ]
+            }
+        }
+                
         
-    elif behave == 5:
+    elif behave == 5: #급식 날짜선택기능
         a1 = content.split('.')
         print(a1)
         if len(a1) == 0:
@@ -357,13 +414,37 @@ def message():
                  }
 }
         behave = 0
+        
+    elif behave == 3: #a1 a2 a3 a4 b 모두 잡변수
+        a1 = content.split('.')
+        a2 = ''
+        b = 0
+        for i in range (0,len(a1)):
+            a3 = movedata2.get(a1[i])
+            a4 = list(a3.keys())
+            a2 +=f"{a1[i]} 강의실\n"
+            for b in range (0,len(a4)):
+            	a2 += f"{a4[b]} : {a3[a4[b]]}\n"
+                
+        a2 += "A,B,C중 -2가 없는 과목은 1이 강의실 위치입니다."
+        response = {
+    "version" : "2.0",
+        "template" : {"outputs" : [{"simpleText" : {"text" : f"{a2}"}}],
+                "quickReplies" : [  
+                                    {"label" : "강의실 출력하기", "action" : "message", "messageText" : "강의실"},
+                                    {"label" : "끝내기", "action" : "message", "messageText" : "끝내기"}
+                                    ]
+                    }
+}
+        behave = 0
+        
 
     elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
-        response = jsonChoiceBan # 반선택
         behave = 6
-        
+        response = jsonChoiceBan # 반선택
+
     elif content == "오늘 시간표":
-    	if int(now.isoweekday()) > 4:
+        if int(now.isoweekday()) > 5:#isoweekday는 5일이 금요일이므로
             response = {
             "version" : "2.0",
             "template" : {
@@ -371,39 +452,34 @@ def message():
                 ]
             }
         }
-		else:
-            a1 = schedule2[choiceban][int(now.weekday())
+        else:
             response = {
     "version" : "2.0",
-    "template": {"outputs" : [{"simpleText" : {"text" : f"{a1}"}}],
+    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule2[choiceban][int(now.weekday())]}"}}],
                  "quickReplies" : [
-                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
-                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
+                                  {"label" : "강의실 출력하기", "action" : "message", "messageText" : "강의실"},
+                                  {"label" : "끝내기", "action" : "message", "messageText" : "끝내기"}
                                   ]
                  }
 }
         behave = 0
-    
-    elif (content == "학사일정 확인하기") or (content in "학사일정"): #학사일정 파싱시작. 몇달치 가져올건지 물어봄
-        response = jsonChoiceMonth
-        behave = 2
         
-    elif (content == "1") and (behave == 2):  #각 달마다 링크 달라짐.
-        pass
-        
-    elif content == "강의실": #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    elif (content == "강의실") or (content in "강의실") or (content == "이동수업") or (content in "이동수업"): #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         response = {
             "version" : "2.0",
             "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{movedata2}"}}
+                "outputs" : [{"simpleText" : {"text" : f"어떤 과목을 원하십니까. 목록: \n{list(movedata2.keys())}\n두개 이상의 과목도 고를 수 있습니다.\n출력예시->물리.확통"}}
                 ]
             }
         }
+        behave = 3
+        
         
     elif content == "일주일 시간표":
         response = {
     "version" : "2.0",
-    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule2[choiceban][0]}\n{schedule[choiceban][1]}\n{schedule[choiceban][2]}\n{schedule[choiceban][3]}\n{schedule[choiceban][4]}"}}],
+    "template" : {"outputs" : [{"simpleText" : {"text" : f"{schedule2[choiceban][int(0)]}\n{schedule2[choiceban][int(1)]}\n{schedule2[choiceban][int(2)]}\n{schedule2[choiceban][int(3)]}\n{schedule2[choiceban][int(4)]}"}}],
                  "quickReplies" : [
                                   {"label" : "강의실 출력하기", "action" : "message", "messageText" : "강의실"},
                                   {"label" : "끝내기", "action" : "message", "messageText" : "끝내기"}
@@ -421,6 +497,15 @@ def message():
 }}]
                  }
 }
+        #아래는 학사일정 
+    elif (content == "학사일정 확인하기") or (content in "학사일정"): #학사일정 파싱시작. 몇달치 가져올건지 물어봄
+        response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"zzzzzz"}}
+                ]
+            }
+        }
         #아래는 급식관련내용
         
     elif content == u"월":
@@ -468,9 +553,9 @@ def message():
         	response = {
             "version" : "2.0",
             "template" : {"outputs" : [{"simpleText" : {"text" : f"해당 날짜[{mealDay}]는 이번 달에 포함되어 있지 않습니다. 이번 주가 달의 첫 주거나 마지막 주일때 비슷한 오류가 발생합니다."}}],
-                          "quickReplies": [
-                                  {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
-                                  {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
+                            "quickReplies": [
+                                    {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
+                                    {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
             }
     }
         else: #선택한 날짜메뉴 있을때
@@ -478,9 +563,9 @@ def message():
             response = {
             "version" : "2.0",
             "template" : {"outputs" : [{"simpleText" : {"text" : f"{menuText}"}}],
-                          "quickReplies": [
-                                  {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
-                                  {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
+                            "quickReplies": [
+                                    {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
+                                    {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
             }
     }
         behave = 0
@@ -536,24 +621,34 @@ def message():
     }
         editbehave = 1
         
-    elif content == "/백업":
-    	response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"{schedule2},{movedata}"}}]
-            }
-        }
-
-        #아래는 기타
     elif content == "/강의실수정":
-    	response = {
+        response = {
             "version" : "2.0",
-            "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다."}}],
+            "template" : {"outputs" : [{"simpleText" : { "text" :
+"""
+수정할 과목과 바뀐 이동위치를 입력해주세요.
+예시, 정치와 법 B의 위치를 수정할때->
+
+주의 : 예시에 있는 그대로 입력해야 인식가능합니다. 이름이 다를시 새 과목으로 인식합니다.
+예: 정치와 법 과목 수정시-> 정치와 법이 아닌 정법으로 입력
+
+2.정법.B.203호/2.확통.C-1.교무실
+이 경우 2학년 정치와법 B 위치를 203호로, 확통 C-1의 위치를 교무실로 수정. 실수했거나 오류시 상담원에게 물어보세요."""}}],
                           "quickReplies": [
                                  {"label": "취소", "action": "message", "messageText": "취소"}]
              }
     }
-
+        editbehave = 2
+        
+    elif content == "/백업":
+    	response = {
+            "version" : "2.0",
+            "template" : {
+                "outputs" : [{"simpleText" : {"text" : f"{schedulebackup},{movedata2}"}}]
+            }
+        }
+    
+    
     elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
         behave = 0
         response = jsonChoiceBase
@@ -608,4 +703,3 @@ def message():
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000, debug=True)
-    사용자
