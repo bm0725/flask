@@ -186,13 +186,18 @@ jsonChoiceBase = {
           "type": "basicCard",
           "items": [
             {
-              "title": "보물상자",
-              "description": "보물상자 안에는 뭐가 있을까",
+              "title": "명령어",
+              "description": "명령어를 선택해 주세요",
               "thumbnail": {
                 "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
               },
               "buttons": [
                 {
+                  "action": "message",
+                  "label": "열어보기",
+                  "messageText": "짜잔! 우리가 찾던 보물입니다"
+                },
+		{
                   "action": "message",
                   "label": "열어보기",
                   "messageText": "짜잔! 우리가 찾던 보물입니다"
