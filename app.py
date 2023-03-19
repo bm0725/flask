@@ -179,46 +179,67 @@ jsonChoiceMonth = {
 
 jsonChoiceBase = {
   "version": "2.0",
-  "template": { "outputs": [{
+  "template": {
+    "outputs": [
+      {
         "carousel": {
           "type": "basicCard",
           "items": [
             {
-              "title": "명령어 목록",
-              "description": "이떤 기능을 사용하시겠어요?",
+              "title": "보물상자",
+              "description": "보물상자 안에는 뭐가 있을까",
+              "thumbnail": {
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+              },
               "buttons": [
                 {
                   "action": "message",
-                  "label": "명령어 확인하기",
-                  "messageText": "추가 명령어"},
+                  "label": "열어보기",
+                  "messageText": "짜잔! 우리가 찾던 보물입니다"
+                },
                 {
-                  "action":  "message",
-                  "label": "급식 메뉴 확인하기",
-                  "webLinkUrl": "급식 메뉴"},
-                {
-                  "action":  "message",
-                  "label": "시간표 확인하기",
-                  "webLinkUrl": "시간표"}
+                  "action":  "webLink",
+                  "label": "구경하기",
+                  "webLinkUrl": "https://e.kakao.com/t/hello-ryan"
+                }
               ]
             },
             {
-              "title": "명령어 목록2",
-              "description": "어떤 기능을 사용하시겠어요2?",
+              "title": "보물상자2",
+              "description": "보물상자2 안에는 뭐가 있을까",
+              "thumbnail": {
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+              },
               "buttons": [
                 {
                   "action": "message",
-                  "label": "이동수업 위치 확인하기",
-                  "messageText": "강의실"
+                  "label": "열어보기",
+                  "messageText": "짜잔! 우리가 찾던 보물입니다"
                 },
                 {
-                  "action": "message",
-                  "label": "수행평가 확인/추가하기(미완성 기능)",
-                  "messageText": "수행평가"
-                },
+                  "action":  "webLink",
+                  "label": "구경하기",
+                  "webLinkUrl": "https://e.kakao.com/t/hello-ryan"
+                }
+              ]
+            },
+            {
+              "title": "보물상자3",
+              "description": "보물상자3 안에는 뭐가 있을까",
+              "thumbnail": {
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+              },
+              "buttons": [
                 {
                   "action": "message",
-                  "label": "사용자 등록(미완성 기능)",
-                  "messageText": "사용자 등록"}
+                  "label": "열어보기",
+                  "messageText": "짜잔! 우리가 찾던 보물입니다"
+                },
+                {
+                  "action":  "webLink",
+                  "label": "구경하기",
+                  "webLinkUrl": "https://e.kakao.com/t/hello-ryan"
+                }
               ]
             }
           ]
@@ -227,7 +248,6 @@ jsonChoiceBase = {
     ]
   }
 }
-
 
 
 jsonChoiceBan = {
