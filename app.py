@@ -186,9 +186,6 @@ jsonChoiceBase = {
             {
               "title": "명령어 목록",
               "description": "이떤 기능을 사용하시겠어요?",
-              "thumbnail": {
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
-              },
               "buttons": [
                 {
                   "action": "message",
@@ -205,11 +202,8 @@ jsonChoiceBase = {
               ]
             },
             {
-              "title": "명령어 목록",
-              "description": "어떤 기능을 사용하시겠어요?",
-              "thumbnail": {
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
-              },
+              "title": "명령어 목록2",
+              "description": "어떤 기능을 사용하시겠어요2?",
               "buttons": [
                 {
                   "action": "message",
@@ -224,8 +218,7 @@ jsonChoiceBase = {
                 {
                   "action": "message",
                   "label": "사용자 등록(미완성 기능)",
-                  "messageText": "사용자 "
-                }
+                  "messageText": "사용자 등록"}
               ]
             }
           ]
@@ -491,7 +484,7 @@ def message():
         behave = 0
         
 
-    elif (content == "강의실") or (content in "강의실") or (content == "이동수업") or (content in "이동수업"): #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    elif (content == "강의실") or (content in "강의실") or (content == "이동수업") or (content in "이동수업") or (content == "이동수업 위치 확인하기"): #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         response = {
             "version" : "2.0",
             "template" : {
