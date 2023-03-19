@@ -95,8 +95,8 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
             menuText += f"{blank}\n"
             i += 1
             if len(c) == i + 1:
-            	break
-    
+                break
+
     return menuText
 
 schedulebackup = []
@@ -451,9 +451,8 @@ def message():
             a4 = list(a3.keys())
             a2 +=f"{a1[i]} 강의실\n"
             for b in range (0,len(a4)):
-            	a2 += f"{a4[b]} : {a3[a4[b]]}\n"
-                
-        a2 += "A,B,C중 -2가 없는 과목은 1이 강의실 위치입니다."
+                a2 += f"{a4[b]} : {a3[a4[b]]}\n"
+        a2 += "\nA,B,C중 -2가 없는 과목은 1이 강의실 위치입니다."
         response = {
     "version" : "2.0",
         "template" : {"outputs" : [{"simpleText" : {"text" : f"{a2}"}}],
@@ -578,7 +577,7 @@ def message():
             }
     }
         elif mealDay < 0 or mealDay > len(menu):
-        	response = {
+            response = {
             "version" : "2.0",
             "template" : {"outputs" : [{"simpleText" : {"text" : f"해당 날짜[{mealDay}]는 이번 달에 포함되어 있지 않습니다. 이번 주가 달의 첫 주거나 마지막 주일때 비슷한 오류가 발생합니다."}}],
                             "quickReplies": [
@@ -591,7 +590,7 @@ def message():
             response = {
             "version" : "2.0",
             "template" : {"outputs" : [{"simpleText" : {"text" : f"{menuText}"}}],
-                            "quickReplies": [
+                                "quickReplies": [
                                     {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
                                     {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
             }
@@ -608,17 +607,17 @@ def message():
         #아래는 수행
         
     elif content == "수행평가":
-    	response = {
+        response = {
             "version" : "2.0",
             "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다. 현재 미완성 기능입니다."}}],
                           "quickReplies": [
-                                  {"label": "수행평가 확인하기", "action": "message", "messageText": "수행 확인"},
-                                 {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
-             }
+                                {"label": "수행평가 확인하기", "action": "message", "messageText": "수행 확인"},
+                                {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
+            }
     }
-        
-    #아래는 사용자 등록기능
-    
+
+#아래는 사용자 등록기능
+
     elif content == "사용자 등록":
         response = {
             "version" : "2.0",
@@ -669,14 +668,13 @@ def message():
         editbehave = 2
         
     elif content == "/백업":
-    	response = {
+        response = {
             "version" : "2.0",
             "template" : {
                 "outputs" : [{"simpleText" : {"text" : f"{schedulebackup},{movedata2}"}}]
             }
         }
-    
-    
+
     elif (content in u"명령어") or (content == "명령어") or (content == "명령어 확인하기"):
         behave = 0
         response = jsonChoiceBase
