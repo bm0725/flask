@@ -126,7 +126,11 @@ movedata2 = {
 }
 
 schedule2 = { #2학년 학교 시간표. 딕셔너리 형태
-    "1" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
+    "1" : ["1교시 : 문학\n 2교시 : 2학년 선택과목 C\n 3교시 : 미술\n 4교시 : 미술\n 5교시 : 수학Ⅰ\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 A\n",
+	   "1교시 : 일본어/중국어\n 2교시 : 수학 Ⅰ\n 3교시 : 문학\n 4교시 : 2학년 선택과목 A\n 5교시 : 영어 Ⅰ\n6교시 : 2학년 선택과목 B\n7교시 : 2학년 선택과목 C\n",
+	   "1교시 : 2학년 선택과목 B\n 2교시 : 문학\n 3교시 : 예배\n 4교시 : 창체\n 5교시 : 영어 Ⅰ\n6교시 : 일본어/중국어\n7교시 : 2학년 선택과목 C\n",
+	   "1교시 : 2학년 선택과목 C\n 2교시 : 일본어/중국어\n 3교시 : 2학년 선택과목 A\n 4교시 : 2학년 선택과목 B\n 5교시 : 수학 Ⅰ\n6교시 : 영어 Ⅰ\n7교시 : 문학\n",
+	   "1교시 : 2학년 선택과목 A\n 2교시 : 영어 Ⅰ\n 3교시 : 수학 Ⅰ\n 4교시 : \n 5교시 : 창체\n6교시 : 창체\n7교시 : 창체\n"],
     "2" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "3" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
     "4" : ["데이터 없음","데이터 없음","데이터 없음","데이터 없음","데이터 없음"],
@@ -174,47 +178,55 @@ jsonChoiceMonth = {
 }
 
 jsonChoiceBase = {
-                 "version" : "2.0",
-                 "template" : {
-                 "outputs" : [{
-                     "carousel" : { # 스킬가이드에 나온 캐러셀 형태
-                         "type" : "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
-                         "items" : [{
-                             "title" : "명령어 목록.", # 제목
-                             "description" : "아래는 사용 가능한 기능들입니다. 기능들을 상세히 알고 싶다면 첫 버튼을 눌러주세요.",
-                             #"thumbnail": { # 썸네일 이미지
-                                 #"imageUrl": can[0].imgurl
-                             "buttons" : [ # 버튼
+  "version": "2.0",
+  "template": { "outputs": [{
+        "carousel": {
+          "type": "basicCard",
+          "items": [
+            {
+              "title": "명령어 목록",
+              "description": "이떤 기능을 사용하시겠어요?",
+              "thumbnail": {
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+              },
+              "buttons": [
                 {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "명령어 확인하기", # 버튼 이름
-                                 "messageText": "추가 명령어"
+                  "action": "message",
+                  "label": "명령어 확인하기",
+                  "messageText": "추가 명령어"},
+                {
+                  "action":  "message",
+                  "label": "급식 메뉴 확인하기",
+                  "webLinkUrl": "급식 메뉴"},
+                {
+                  "action":  "message",
+                  "label": "시간표 확인하기",
+                  "webLinkUrl": "시간표"}
+              ]
+            },
+            {
+              "title": "명령어 목록",
+              "description": "어떤 기능을 사용하시겠어요?",
+              "thumbnail": {
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "이동수업 위치 확인하기",
+                  "messageText": "강의실"
                 },
                 {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "급식 메뉴 확인하기",
-                                 "messageText": "급식 메뉴"
+                  "action": "message",
+                  "label": "수행평가 확인/추가하기(미완성 기능)",
+                  "messageText": "수행평가"
                 },
                 {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "시간표 확인하기",
-                                 "messageText" : "시간표"
-                },
-                {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "이동수업 위치 확인하기",
-                                 "messageText" : "강의실"
-                },
-                {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "수행평가 확인/추가하기",
-                                 "messageText" : "수행평가"
-                },
-                {
-                                 "action" : "message", # 동작 형태(텍스트 출력)
-                                 "label" : "사용자 등록",
-                                 "messageText" : "사용자 등록"
-                }]
+                  "action": "message",
+                  "label": "사용자 등록(미완성 기능)",
+                  "messageText": "사용자 "
+                }
+              ]
             }
           ]
         }
@@ -223,7 +235,27 @@ jsonChoiceBase = {
   }
 }
 
+
+
 jsonChoiceBan = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "채팅 대신 버튼을 눌러 몇반의 시간표를 볼 것인지 골라주세요. 버튼을 사용하지 않을 시 오류가 있을 수 있습니다."}}],
+                 "quickReplies": [
+                                {"label": "1반", "action": "message", "messageText": "1"},
+			 	{"label": "2반", "action": "message", "messageText": "2"},
+			 	{"label": "3반", "action": "message", "messageText": "3"},
+			 	{"label": "4반", "action": "message", "messageText": "4"},
+			 	{"label": "5반", "action": "message", "messageText": "5"},
+			 	{"label": "6반", "action": "message", "messageText": "6"},
+			 	{"label": "7반", "action": "message", "messageText": "7"},
+			 	{"label": "8반", "action": "message", "messageText": "8"},
+			 	{"label": "9반", "action": "message", "messageText": "9"},
+			 	{"label": "10반", "action": "message", "messageText": "10"}
+                                  ]
+                 }
+}
+
+jsonChoiceBan1 = {
                  "version": "2.0",
                  "template": {
                  "outputs": [{
@@ -277,11 +309,6 @@ jsonChoiceParse = {
                  }
 }
 
-instruct ="""명령어 목록입니다.
-'명령어'가 들어간 채팅을 쳐 이 명령어 설명들과 빠른 이동을 불러올 수 있습니다.
-'급식'이 들어간 채팅을 쳐 원하는 요일이나 오늘의 급식 메뉴를 확인할 수 있습니다.
-"""
-
 @app.route('/keyboard')
 
 def Keyboard():
@@ -293,7 +320,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():  
     
-    global mealDay, behave, now, instruct, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave, jsonChoiceBan, choiceban
+    global mealDay, behave, now, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave, jsonChoiceBan, choiceban
     global movedata2, schedule2, schedulebackup, movebackup, editbehave
     
     now = datetime.datetime.now()
@@ -492,7 +519,8 @@ def message():
     "version" : "2.0",
     "template": {"outputs" : [{"simpleText": {"text": 
 """
-명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
+'명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
+'강의실'을 입력해 이동수업 위치를 확인하실 수 있습니다.
 """
 }}]
                  }
@@ -582,7 +610,7 @@ def message():
     elif content == "수행평가":
     	response = {
             "version" : "2.0",
-            "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다."}}],
+            "template" : {"outputs" : [{"simpleText" : {"text" : "학생들이 과목별로 수행평가를 업로드하거나 확인할 수 있습니다. 현재 미완성 기능입니다."}}],
                           "quickReplies": [
                                   {"label": "수행평가 확인하기", "action": "message", "messageText": "수행 확인"},
                                  {"label": "수행평가 추가하기", "action": "message", "messageText": "수행 추가"}]
