@@ -34,6 +34,11 @@ schulDate = f"{now.year}.{now.month}.{now.day}"
 
 URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
 
+with open("data.json", "r") as f:
+    alldata = json.load(f)
+
+print(alldata)
+
 alldata = {"a" : 1} #백업데이터
 with open("data.json", "w") as f:
     json.dump(alldata, f)
