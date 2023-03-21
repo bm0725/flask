@@ -189,7 +189,7 @@ jsonChoiceBase = {
               "title": "명령어",
               "description": "명령어를 선택해 주세요",
               "thumbnail": {
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+                "imageUrl": "https://drive.google.com/file/d/1T-2cJlqVa-5Dj8tIpwtlMdMjBEOGhmMG/view?usp=sharing"
               },
               "buttons": [
                 {
@@ -210,10 +210,10 @@ jsonChoiceBase = {
               ]
             },
             {
-              "title": "명령어2",
+              "title": "명령어",
               "description": "어떤 명령어를 사용하시겠어요?",
               "thumbnail": {
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+                "imageUrl": "https://drive.google.com/file/d/1aNTnmhP5ZBOesQpL3WFyM2izOQ5vhgrr/view?usp=sharing"
               },
               "buttons": [
                 {
@@ -234,10 +234,10 @@ jsonChoiceBase = {
               ]
             },
             {
-              "title": "명령어3",
+              "title": "명령어",
               "description": "어떤 명령어를 사용하시겠어요?",
               "thumbnail": {
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/sample/lj3JUcmrzC53YIjNDkqbWK.jpg"
+                "imageUrl": "https://drive.google.com/file/d/1UdjkhhNb_N5wdupdK-fU6okUuuvT0wo1/view?usp=sharing"
               },
               "buttons": [
                 {
@@ -247,8 +247,8 @@ jsonChoiceBase = {
                 },
 		{
                   "action": "message",
-                  "label": "챗봇에 대해 알아보기(미완성 기능)",
-                  "messageText": "미완성 기능입니다."
+                  "label": "챗봇에 대해 알아보기",
+                  "messageText": "챗봇 알아보기."
                 }
               ]
             }
