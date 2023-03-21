@@ -34,8 +34,14 @@ schulDate = f"{now.year}.{now.month}.{now.day}"
 
 URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
 
+dic all_data = {"a" = 1} #백업데이터
+with open("data.json", "w") as f:
+    json.dump(data, f)
 
+with open("data.json", "r") as f:
+    data = json.load(f)
 
+print(data)
 
 def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가져옴
     global menu, URL
