@@ -186,7 +186,7 @@ jsonChoiceBase = {
           "type": "basicCard",
           "items": [
             {
-              "title": "명령어",
+              "title": "명령어1",
               "description": "명령어를 선택해 주세요",
               "thumbnail": {
                 "imageUrl": "https://drive.google.com/file/d/1T-2cJlqVa-5Dj8tIpwtlMdMjBEOGhmMG/view?usp=sharing"
@@ -210,7 +210,7 @@ jsonChoiceBase = {
               ]
             },
             {
-              "title": "명령어",
+              "title": "명령어2",
               "description": "어떤 명령어를 사용하시겠어요?",
               "thumbnail": {
                 "imageUrl": "https://drive.google.com/file/d/1aNTnmhP5ZBOesQpL3WFyM2izOQ5vhgrr/view?usp=sharing"
@@ -234,7 +234,7 @@ jsonChoiceBase = {
               ]
             },
             {
-              "title": "명령어",
+              "title": "명령어3",
               "description": "어떤 명령어를 사용하시겠어요?",
               "thumbnail": {
                 "imageUrl": "https://drive.google.com/file/d/1UdjkhhNb_N5wdupdK-fU6okUuuvT0wo1/view?usp=sharing"
