@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from flask import Flask, jsonify, request
 import datetime
 import json
+import os
+import sys
 
 now = datetime.datetime.now()
 now = now + datetime.timedelta(hours=9)
@@ -34,10 +36,6 @@ schulDate = f"{now.year}.{now.month}.{now.day}"
 
 URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
 
-with open("data.json", "r") as f:
-    a1 = json.load(f)
-
-print(a1)
 
 alldata = {"a" : 1} #백업데이터
 with open("data.json", "w") as f:
@@ -45,8 +43,6 @@ with open("data.json", "w") as f:
 
 with open("data.json", "r") as f:
     alldata = json.load(f)
-
-print(alldata)
 
 def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가져옴
     global menu, URL
