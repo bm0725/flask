@@ -18,11 +18,11 @@ schulGion = "stu.jbe.go.kr"
 schulMeal = "1"
 #이것들을 수정하면 다른 학교의 식단 파싱도 가능하다.
 menu = [] #이곳에 메뉴를 넣는다.미완성
+schulYear = "2023" #학사일정 년도
+schulSem = "1" #학사일정 학기
 
 menuText = ' '
 
-ID = ""#리로스쿨 일정파싱용 운영자 ID, 비번. /개발자명령어를 입력해 수정가능.
-PS = ""
 password = "chatbot206"
 
 print(now.day, now.isoweekday())
@@ -30,18 +30,20 @@ print(type(now.day),type(now.isoweekday()))
 
 behave = 0 #1은 급식파싱, 2는 일정파싱, 3은 강의실,4수행출력, 5는 급식 선택, 6은 시간표 개발자모드(데이터수정)
 mealDay = 0 #급식파싱할때 쓸 날짜 넣을 변수다.
-editbehave = 0 #데이터수정. 1은 시간표,
+editbehave = 0 #데이터수정. 1은 시간표,2는 강의실, 3은 강의실삭제
     
 schulDate = f"{now.year}.{now.month}.{now.day}"
+menuDate = "" #급식리스트의 월
 
 URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
 
-
-print(os.getcwd())
+URL2 = "https://{}/sts_sci_sf00_001.do?schulCode={}&schulKndScCode={}&schulCrseScCode={}&sem={}&ay={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode,schulSem,schulYear)
 
 def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가져옴
     global menu, URL
     url = str(url)
+    menuBackup = menu  #전 월 급식메뉴를 저장.
+    menuBackup.append(str(now.year)+menuDate) #숫자. 백업한 급식메뉴의 년월을 저장.
     res = requests.get(url)
     soup = BeautifulSoup(res.text,"html.parser")
     text= soup.select_one('#contents > div:nth-child(2) > table > tbody') #급식
@@ -50,20 +52,21 @@ def Parsing(url): # 함수.  URL넣으면 나이스에서 급식 파싱해 가�
     menu = menu.split("\n")
     remove = {'', ' '}
     menu = [i for i in menu if i not in remove]
-    return menu 
+    return menu
 
 def ParsingRiro(url2):#리로스쿨 학사일정 가져오기. 리로스쿨은 로그인필요해 id랑 PS로 로그인해 파싱.
-    global ID, Ps
-    #print(menu)
+    global URL2
+    pass
+    print(menu)
     
-#https://stu.jbe.go.kr/popup.jsp?page=/ws/edusys/cm/sym/ocm/oi/sym_ocmoi_m02&popupID=20230313184856&w2xHome=/ws/edusys/pa/com/&w2xDocumentRoot= 하굑선택창미완성
+
     
 def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일은 1, 화요일은 2,수3,목4,금5,토6,일7임.
     global mealDay, behave
     
     weekday = int(weekday)
     weekdaynow = now.isoweekday()
-    print(",,,,,,,,,,,,,,,,,",weekday,weekdaynow)
+    menuDate = str(now.month)
     if weekdaynow == weekday:
         mealDay = int(now.day)
         print(mealDay)
@@ -75,7 +78,7 @@ def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일�
     
     behave = 1#급식파싱시작
         
-    return mealDay, behave
+    return mealDay, behave, menuDate
 
 
 def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. 알레르기 정보를 전부 떼서 없앤다.
@@ -93,16 +96,16 @@ def Menutrim(menu, mealDay): #메뉴를 보기 쉽게 정렬하는 합수다. �
         menuText = f"{mealDay}일은 급식을 제공하지 않습니다."
     else:
         while True:
-            blank = c[i][:-1]
-            menuText += f"{blank}\n"
+            menuText += f"{c[i][:-1]}\n"
             i += 1
             if len(c) == i + 1:
                 break
 
     return menuText
 
-schedulebackup = []
-movebackup = []
+log = ""
+
+menuBackup = ['1','1','1']
 
 movedata2 = {
     "물리" : {"A-1" : "","A-2" : '1',"B-1" : "2","B-2" : "3","C-1" : "4","C-2" : "5","D" : "6","E" : "7"},
@@ -167,14 +170,8 @@ jsonChoiceDay = {
 
 jsonChoiceMonth = {
     "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "어떤 월의 학사일정을 가져오시겠어요?"}}],
-                 "quickReplies": [{"label": "오늘", "action": "message", "messageText": "오늘"},
-                                  {"label": "월", "action": "message", "messageText": "월"},
-                                  {"label": "화", "action": "message", "messageText": "화"},
-                                  {"label": "수", "action": "message", "messageText": "수"},
-                                  {"label": "목", "action": "message", "messageText": "목"},
-                                  {"label": "금", "action": "message", "messageText": "금"},
-                                  {"label": "사용자 지정", "action": "message", "messageText": "사용자 지정"}
+    "template": {"outputs": [{"simpleText": {"text": "몇월달 학사일정을 가져오시겠어요?"}}],
+                 "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}
                                   ]
                  }
 }
@@ -250,7 +247,7 @@ jsonChoiceBase = {
 		{
                   "action": "message",
                   "label": "챗봇에 대해 알아보기",
-                  "messageText": "챗봇 알아보기."
+                  "messageText": "챗봇 알아보기"
                 }
               ]
             }
@@ -264,7 +261,7 @@ jsonChoiceBase = {
 
 jsonChoiceBan = {
     "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "채팅 대신 버튼을 눌러 몇반의 시간표를 볼 것인지 골라주세요. 버튼을 사용하지 않을 시 오류가 있을 수 있습니다."}}],
+    "template": {"outputs": [{"simpleText": {"text": "몇반의 시간표를 볼 것인지 골라주세요."}}],
                  "quickReplies": [
                                 {"label": "1반", "action": "message", "messageText": "1"},
 			 	{"label": "2반", "action": "message", "messageText": "2"},
@@ -279,50 +276,6 @@ jsonChoiceBan = {
                                   ]
                  }
 }
-
-jsonChoiceBan1 = {
-                 "version": "2.0",
-                 "template": {
-                 "outputs": [{
-                     "carousel": { # 스킬가이드에 나온 캐러셀 형태
-                         "type": "basicCard", # 기본형 선택 (<->비즈니스형도 존재)
-                         "items": [{"title": "시간표 반 선택", # 제목
-                             "description": "채팅 대신 버튼을 눌러 몇반의 시간표를 볼 것인지 골라주세요.", # 설명
-                             #"thumbnail": { # 썸네일 이미지
-                                 #"imageUrl": can[0].imgurl
-                             "buttons": [ # 버튼
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "6반", # 버튼 이름
-                                 "messageText": "6"},                       
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "1반", # 버튼 이름
-                                 "messageText": "1"},   
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "2반", # 버튼 이름
-                                 "messageText": "2"},          
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "3반", # 버튼 이름
-                                 "messageText": "3"},             
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "4반", # 버튼 이름
-                                 "messageText": "4"},
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "5반", # 버튼 이름
-                                 "messageText": "5"},           
-                                {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "7반", # 버튼 이름
-                                 "messageText": "7"},
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "8반", # 버튼 이름
-                                 "messageText": "8"},
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "9반", # 버튼 이름
-                                 "messageText": "9"},
-                                 {"action": "message", # 동작 형태(텍스트 출력)
-                                 "label": "10반", # 버튼 이름
-                                 "messageText": "10"}
-                                 
-                             ]}]}}]}}
 
 jsonChoiceParse = {
     "version": "2.0",
@@ -346,7 +299,7 @@ def Keyboard():
 def message():  
     
     global mealDay, behave, now, schedule, URL, a1, classpos, menuText, menu, jsonChoiceMonth, jsonChoiceBase, editbehave, jsonChoiceBan, choiceban
-    global movedata2, schedule2, schedulebackup, movebackup, editbehave
+    global movedata2, schedule2, menuBackup, editbehave, menuDate
     
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
@@ -410,18 +363,23 @@ def message():
             }
         }
     
-    elif editbehave == 2:
-        movebackup.append(content)
-        a1 = content.split('/','.')
+    elif editbehave == 2:  #강의실수정기능
+        content = content.replace("/",".").replace(",",".")
+        print(content)
+        a1 = content.split('.')
+        print(a1,len(a1))
+        i = 0
         while True:
-            i = 0 #반복용잡변수
             if a1[(i+1)] not in movedata2:
-                movedata2[a1[(i+1)]] = {"A-1" : ' ',"A-2" : ' ',"B-1" : " ","B-2" : " ","C-1" : " ","C-2" : " ","D" : " ","E" : " "}
+                movedata2[a1[(i+1)]] = {"A" : ' ',"B" : " ","C" : " "}
                 movedata2[a1[(i+1)]][a1[(i+2)]] = a1[(i + 3)]
+                movedata2[a1[(i+1)]] = dict(sorted(movedata2[a1[(i+1)]].items())) #정렬
             else:
                 movedata2[a1[(i+1)]][a1[(i+2)]] = a1[(i + 3)]
-            i += 3
-            if len(a1)-1 < i + 3:
+                movedata2[a1[(i+1)]] = dict(sorted(movedata2[a1[(i+1)]].items()))
+            i = i + 4
+            print(i)
+            if len(a1) <= i:
                     break
         response = {
             "version" : "2.0",
@@ -430,12 +388,13 @@ def message():
                 ]
             }
         }
+        editbehave = 0
                 
         
     elif behave == 5: #급식 날짜선택기능
-        a1 = content.split('.')
-        print(a1)
-        if len(a1) == 0:
+        menuDateOutput = content.split('.')
+        print(menuDateOutput)
+        if len(menuDateOutput) == 0:
             behave = 0
             response = {
             "version" : "2.0",
@@ -446,29 +405,31 @@ def message():
         }
             mealDay = 0
         else:
-            mealDay = int(a1[1])
-            schulDate = f"{now.year}.{a1[0]}.{a1[1]}"
+            mealDay = int(menuDateOutput[1])
+            menuDate = menuDateOutput[0]
+            schulDate = f"{now.year}.{menuDateOutput[0]}.{menuDateOutput[1]}"
             behave = 1
             URL = "https://{}/sts_sci_md00_001.do?schulCode={}&schulCrseScCode={}&schulKndScCode={}&schMmealScCode={}&schYmd={}".format(schulGion,schulCode,schulCrseScCode,schulKndScCode, schulMeal ,schulDate)
             response = jsonChoiceParse
         #URL = 에서 급식을 파싱할때 날짜가 변할 수 있으므로 현재 날짜로 바꿔 출력한다.
         
-        
     elif behave == 6: #시간표 선택하기
+        content = content.replace("반","")
         choiceban = content #선택한 반 저장
         response = {
-    "version" : "2.0",
-    "template": {"outputs" : [{"simpleText" : {"text" : f"언제의 시간표를 원하십니까?"}}],
-                 "quickReplies" : [
-                                  {"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
-                                  {"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
-                                  ]
+	"version" : "2.0",
+	"template": {"outputs" : [{"simpleText" : {"text" : f"언제의 시간표를 원하십니까?"}}],
+				"quickReplies" : [
+								{"label" : "일주일 전체", "action" : "message", "messageText" : "일주일 시간표"},
+								{"label" : "오늘", "action" : "message", "messageText" : "오늘 시간표"}
+                                ]
                  }
 }
         behave = 0
         
     elif behave == 3: #a1 a2 a3 a4 b 모두 잡변수
         a1 = content.split('.')
+        print(a1)
         a2 = ''
         b = 0
         for i in range (0,len(a1)):
@@ -518,12 +479,13 @@ def message():
 
     elif (content == "강의실") or (content in "강의실") or (content == "이동수업") or (content in "이동수업") or (content == "이동수업 위치 확인하기"): #강의실내용 가져오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         response = {
-            "version" : "2.0",
-            "template" : {
-                "outputs" : [{"simpleText" : {"text" : f"어떤 과목을 원하십니까. 목록: \n{list(movedata2.keys())}\n두개 이상의 과목도 고를 수 있습니다.\n출력예시->물리.확통"}}
-                ]
-            }
-        }
+    "version" : "2.0",
+    "template" : {"outputs" : [{"simpleText" : {"text" : f"어떤 과목을 원하십니까. 목록: \n{list(movedata2.keys())}\n두개 이상의 과목도 고를 수 있습니다.\n출력예시->물리.확통"}}],
+                 "quickReplies" : [
+                                  {"label" : "취소하기", "action" : "message", "messageText" : "취소"}
+                                  ]
+                 }
+}
         behave = 3
         
         
@@ -537,18 +499,7 @@ def message():
                                   ]
                  }
 }
-    
-    elif content == "추가 명령어":
-        response = {
-    "version" : "2.0",
-    "template": {"outputs" : [{"simpleText": {"text": 
-"""
-'명령어'를 입력해 사용가능한 기능을 확인하실 수 있습니다.\n'급식 메뉴'를 입력해 선택한 날짜의 급식을 확인할 수 있습니다.\n'시간표'를 입력해 학급 시간표를 확인할 수 있습니다.
-'강의실'을 입력해 이동수업 위치를 확인하실 수 있습니다.
-"""
-}}]
-                 }
-}
+        
         #아래는 학사일정 
     elif (content == "학사일정 확인하기") or (content in "학사일정"): #학사일정 파싱시작. 몇달치 가져올건지 물어봄
         response = {
@@ -591,7 +542,12 @@ def message():
         behave = 5
         
     elif (content == (u"급식 파싱" or u"급식파싱")) and behave == 1:
-        Parsing(URL)
+        if menuBackup[-1] == str(now.year)+menuDate: #백업한 급식의 월과 찾을 급식월이 같으면
+            menu = menuBackup
+            del menu[-1]
+            print(ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ)
+        else:
+        	Parsing(URL)
         if str(mealDay) in menu:
             response = {
             "version" : "2.0",
@@ -661,10 +617,8 @@ def message():
 """
 수정할 반과 바뀐 시간표내용을 입력해주세요.
 예시, 2학년 6반의 월요일을 수정할때->
-
 주의 : 요일 대신 요일코드를 입력해주세요.
 월요일은 1, 화 : 2, 수 : 3, 목 : 4, 금 : 5
-
 2.6.1.선택과목A.선택과목B.수학.수학.수학.수학.창체
 이 경우 2학년 6반 월요일 1교시 선택B, 마지막 교시 창체. 실수했거나 오류시 상담원에게 물어보세요."""}}],
                           "quickReplies": [
@@ -680,17 +634,37 @@ def message():
 """
 수정할 과목과 바뀐 이동위치를 입력해주세요.
 예시, 정치와 법 B의 위치를 수정할때->
-
 주의 : 예시에 있는 그대로 입력해야 인식가능합니다. 이름이 다를시 새 과목으로 인식합니다.
 예: 정치와 법 과목 수정시-> 정치와 법이 아닌 정법으로 입력
-
 2.정법.B.203호/2.확통.C-1.교무실
-이 경우 2학년 정치와법 B 위치를 203호로, 확통 C-1의 위치를 교무실로 수정. 실수했거나 오류시 상담원에게 물어보세요."""}}],
+이 경우 2학년 정치와법 B 위치를 203호로, 확통 C-1의 위치를 교무실로 수정. 실수했거나 오류시 상담원에게 물어보세요.
+
++과목이 강의실 리스트에 없을 시, 위처럼 하면 자동으로 과목이 추가됩니다.
+"""}}],
                           "quickReplies": [
                                  {"label": "취소", "action": "message", "messageText": "취소"}]
              }
     }
         editbehave = 2
+
+    elif content == "/강의실삭제":
+        response = {
+            "version" : "2.0",
+            "template" : {"outputs" : [{"simpleText" : { "text" :
+"""
+수정할 과목과 삭제할 과목의 반을 입력해주세요.
+예시, 2학년 정치와 법 B-2와 A-2를 삭제할 때->
+주의 : 예시에 있는 그대로 입력해야 인식가능합니다. 이름이 다를시 새 과목으로 인식합니다.
+예: 정치와 법 과목 수정시-> 정치와 법이 아닌 정법으로 입력
+2.정법.B-2.A-2
+이 경우 2학년 정치와법 A-2와 B-2가 리스트에서 사라집니다.
+
+다양한 과목의 반을 삭제하려 할 경우 한 과목씩 해 주세요."""}}],
+                          "quickReplies": [
+                                 {"label": "취소", "action": "message", "messageText": "취소"}]
+             }
+    }
+        editbehave = 3
         
     elif content == "/백업":
         response = {
