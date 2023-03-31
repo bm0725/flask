@@ -544,8 +544,8 @@ def message():
             del menu[-1]
             print("건너뜀")
         else:
-        	Parsing(URL)
-                print("파싱함")
+            Parsing(URL)
+            print("파싱함")
         if str(mealDay) in menu:
             response = {
             "version" : "2.0",
