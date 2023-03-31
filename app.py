@@ -75,9 +75,6 @@ def Weekday(weekday): #급식날짜계산함수. 			isoweekday에서 월요일�
             mealDay = int(now.day) - (weekdaynow - weekday)
         else:
             mealDay = int(now.day) +(weekday - weekdaynow)
-    
-    behave = 1#급식파싱시작
-        
     return mealDay, behave, menuDate
 
 
@@ -545,9 +542,10 @@ def message():
         if menuBackup[-1] == str(now.year)+menuDate: #백업한 급식의 월과 찾을 급식월이 같으면
             menu = menuBackup
             del menu[-1]
-            print(ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ)
+            print("건너뜀")
         else:
         	Parsing(URL)
+                print("파싱함")
         if str(mealDay) in menu:
             response = {
             "version" : "2.0",
