@@ -180,7 +180,8 @@ choice : {
     "중국어": [],
     "연극": [],
     "미술": []
-               }
+            }
+
 pan : [
         {"user" : "백민재", "name" : "동아리 프레너미 모집", "detail" : "프로그래밍/코딩 동아리 프레너미에서 여러분을 모집합니다.", "number" : "2211011@jsh.hs.kr", "date" : "2023.7.23"}
         ]
@@ -213,6 +214,7 @@ def message():
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
     print(now.day)
+    print(choice)
 
     dataReceive = request.get_json()
     content = dataReceive['userRequest']['utterance']
