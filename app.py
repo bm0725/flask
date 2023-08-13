@@ -21,14 +21,14 @@ schulGion = "P10"  # 학교 지역코드
 # 이것들을 수정하면 다른 학교의 식단 파싱도 가능하다.
 menu = ""  # 이곳에 메뉴를 넣는다.
 
-alldata = {}
-
 password = "chatbot206"
 
 print(now.day, now.isoweekday())
 print(type(now.day), type(now.isoweekday()))
 
-behave = 0  # 1은 급식파싱, 2 시간표, 6 학사. 345 7 수행
+alldata = {}
+
+behave = 0  # 1은 급식파싱, 2 시간표, 6 학사. 345 7 수행. 8 인원 모집
 mealDay = "0"  # 급식파싱할때 쓸 날짜 넣을 변수다.
 editbehave = 0  # 데이터수정. 1은 시간표,2는 강의실, 3은 강의실삭제
 
@@ -73,7 +73,6 @@ def ParsingSchedule(grade, month):  # 나이스 api 학사일정 가져오기
         grade = 'THREE_GRADE_EVENT_YN'
     else:
         grade = "pass"
-    print(grade)
     res = requests.get(URL)
     soup = BeautifulSoup(res.text, 'html.parser')
     basesch = soup.get_text()
@@ -87,7 +86,6 @@ def ParsingSchedule(grade, month):  # 나이스 api 학사일정 가져오기
             for i in range(Days):
                 schedule = schedule + f"{int(basesch[i]['AA_YMD'][-2:])}일 : {basesch[i]['EVENT_NM']}\n"
         else:
-            print("1")
             for i in range(Days):
                 if basesch[i][grade] == "Y":
                     schedule = schedule + f"{int(basesch[i]['AA_YMD'][-2:])}일 : {basesch[i]['EVENT_NM']}\n"
@@ -144,6 +142,11 @@ def Weekday(day):  # 급식날짜계산함수. 이해할 것.
         mealDay = target_day.strftime('%Y%m%d')
     return mealDay
 
+def PanLoading():
+    global pan, panResult
+    panResult = "게시글 목록\n\n"
+    panResult += "\n".join(f"{z+1}. {pan[z]['name'][:20]}..." if len(pan[z]['name']) > 20 else f"{z+1}. {pan[z]['name']}" for z in range(0, len(pan)))
+    return panResult
 
 jsonChoiceDay = {
     "version": "2.0",
@@ -158,50 +161,41 @@ jsonChoiceDay = {
                                   ]
                  }
 }
-
-
-choice = {
-        "물리": [],
-        "화학": [],
-        "생명": [],
-        "지구": [],
-        "경제": [],
-        "정법": [],
-        "사문": [],
-        "세계사": [],
-        "한국지리": [],
-        "영어권문화": [],
-        "문학개론": [],
-        "확통": [],
-        "기하": [],
-        "미적": [],
-        "일본어": [],
-        "중국어": [],
-        "연극": [],
-        "미술": []
-        }
+"choice" : {
+    "물리": [],
+    "화학": [],
+    "생명": [],
+    "지구": [],
+    "경제": [],
+    "정법": [],
+    "사문": [],
+    "세계사": [],
+    "한국지리": [],
+    "영어권문화": [],
+    "문학개론": [],
+    "확통": [],
+    "기하": [],
+    "미적": [],
+    "일본어": [],
+    "중국어": [],
+    "연극": [],
+    "미술": []
+               },
+"pan" : [
+        {"user" : "백민재", "name" : "동아리 프레너미 모집", "detail" : "프로그래밍/코딩 동아리 프레너미에서 여러분을 모집합니다.", "number" : "2211011@jsh.hs.kr", "date" : "2023.7.23"}
+        ],
     
-homeworkdata = {
-         "1": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []},
-         "2": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []},
-         "3": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []}
+"homeworkdata" : {
+    "1": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []},
+    "2": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []},
+    "3": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": []}
      
-                       }
-fillter = {
-
-        "1": {"0": [0, 0, 0, 0, 0, 0, 0], "1": [0, 0, 0, 0, 0, 0, 0], "2": [0, 0, 0, 0, 0, 0, 0], "3": [0, 0, 0, 0, 0, 0, 0], "4": [0, 0, 0, 0, 0, 0, 0]},
-        "2": {"0": [0, "선택과목 C", 0, 0, 0, "선택과목 B", "선택과목 A"], "1": [0, 0, 0, "선택과목 A", 0, "선택과목 B", "선택과목 C"], "2": ["선택과목 B", 0, 0, 0, 0, 0, "선택과목 C"], "3": ["선택과목 C", 0, "선택과목 A", "선택과목 B", 0, 0, 0], "4": ["선택과목 A", 0, 0, 0, 0, 0, 0]},
-        "3": {"0": ["선택과목 C", 0, "선택과목 B", "선택과목 A", 0, 0, 0], "1": [0, "선택과목 B", "선택과목 A", 0, 0, 0, 0], "2": [0, 0, 0, 0, "선택과목 B", "선택과목 C", 0], "3": [0, "선택과목 C", 0, 0, 0, "선택과목 B", "선택과목 A"], "4": [0, "선택과목 A", 0, "선택과목 C", 0, 0, 0]}
-                 }
-
-jsonChoiceMonth = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "몇월달 학사일정을 가져오시겠어요?"}}],
-                 "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}
-                                  ]
-                 }
-}
-
+                },
+"fillter" : {
+    "1": {"0": [0, 0, 0, 0, 0, 0, 0], "1": [0, 0, 0, 0, 0, 0, 0], "2": [0, 0, 0, 0, 0, 0, 0], "3": [0, 0, 0, 0, 0, 0, 0], "4": [0, 0, 0, 0, 0, 0, 0]},
+    "2": {"0": ["선택과목 A", "선택과목 B", 0, 0, "선택과목 C", 0, 0], "1": ["선택과목 C", 0, 0, "선택과목 A", "선택과목 B", 0, 0], "2": ["선택과목 B", 0, 0, 0, "선택과목 A", 0, 0], "3": [0, "선택과목 A", 0, "선택과목 B", 0, 0,"선택과목 C"], "4": [0, "선택과목 C", 0, 0, 0, 0, 0]},
+    "3": {"0": [0, 0, "선택과목 B", 0, 0, "선택과목 A", "선택과목 C"], "1": [0, "선택과목 A", "선택과목 C", 0, 0, "선택과목 B", 0], "2": [0, 0, 0, 0, 0, 0, "선택과목 B"], "3": ["선택과목 B", 0, 0, 0, 0, "선택과목 A", "선택과목 C"], "4": [0, 0, "선택과목 A", "선택과목 C", 0, 0, 0]}
+            }
 
 @app.route('/keyboard')
 
@@ -213,8 +207,8 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():
 
-    global mealDay, behave, now, schedule, MenuURL, classpos, menu, jsonChoiceMonth, editbehave, response, choiceban, userdata, loginBehave
-    global homeworkdata, fillter, banSchedule, alldata, choice
+    global mealDay, behave, now, schedule, MenuURL, classpos, menu, editbehave, response, choiceban, userdata, loginBehave
+    global homeworkdata, fillter, banSchedule, alldata, choice, pan
 
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
@@ -240,20 +234,6 @@ def message():
                         }
                     }
 
-    elif content == password:  # 운영자기능 설명
-        response = {
-            "version": "2.0",
-            "template": {
-                "outputs": [{"simpleText": {"text":
-"""
-아래는 데이터 수정및 주요 내용에 접근할 수 있는 명령어들입니다.
-/강의실수정 -> 학년 강의실 정보를 수정할 수 있다. 둘다 지금 2학년전용
-/수행평가수정->잘못 추가한 수행평가 정보를 수정할수 있다.
-                """}}  # isoweekday로 얻은값이 4면 금요일을 의미하므로 금요일 초과(토,일)인지 확인한다.
-                           ]
-            }
-        }
-
     elif behave == 1:  # 급식파싱
         if len(content) < 3:  # 월화수목금 오늘 등 시
             Weekday(content)
@@ -277,7 +257,7 @@ def message():
                     "version": "2.0",
                     "template": {"outputs": [{"simpleText": {"text": f"해당 날짜[{mealDay}]는 급식을 제공하지 않습니다."}}],
                                  "quickReplies": [
-                                                {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
+                                                {"label": "끝내기", "action": "message", "messageText": "끝내기"},
                                                 {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
                                  }
                             }
@@ -286,7 +266,7 @@ def message():
                     "version": "2.0",
                     "template": {"outputs": [{"simpleText": {"text": f"{mealDay}일 급식메뉴\n{menu}"}}],
                                  "quickReplies": [
-                                                {"label": "급식 파싱 그만하기", "action": "message", "messageText": "끝내기"},
+                                                {"label": "끝내기", "action": "message", "messageText": "끝내기"},
                                                 {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
                                  }
                            }
@@ -298,7 +278,7 @@ def message():
         content = content.replace("월", "").replace("학년", "").replace(",", ".")
         a1 = content.split(".")
         if len(a1) == 1:
-            ParsingSchedule("없음", f"{a1[0]}")
+            ParsingSchedule("없음", a1[0])
             response = {
                 "version": "2.0",
                 "template": {"outputs": [{"simpleText": {"text": f"{schedule}"}}],
@@ -328,7 +308,7 @@ def message():
                        }
         behave = 0
         schedule = ""
-        
+
     elif behave == 3:
         if (content not in choice) or (len(choice[content])) == 0:
             response = {
@@ -355,7 +335,7 @@ def message():
         if (len(choban) != 2) or (choban[1] not in ["1","2","3","4","5","6","7","8","9","10"]) or(choban[0] not in ["1","2","3"]):
             response = {
                 "version": "2.0",
-                "template": {"outputs": [{"simpleText": {"text": "해당 학반의 정보가 없거나, 정상적인 학반 데이터가 아닙니다." } } ],
+                "template": {"outputs": [{"simpleText": {"text": "해당 학반의 정보가 없거나, 정상적인 학반 데이터가 아닙니다." }}],
                              "quickReplies": [
                                             {"label": "그만하기", "action": "message", "messageText": "끝내기"},
                                             {"label": "다시하기", "action": "message", "messageText": "수행평가 확인/반"}]
@@ -373,13 +353,13 @@ def message():
         behave = 0
 
     elif behave == 5:
-        work = content.split(".")
+        work = content.split("/")
         if len(work) != 2:
             response = {
                 "version": "2.0",
-                "template": {"outputs": [{"simpleText": {"text": "혹시 . 을 2번 이상 사용하셨나요? 자료 처리에 오류가 발생했습니다.\n 적합한 형태로 입력해 주세요." } } ],
+                "template": {"outputs": [{"simpleText": {"text": "혹시 /를 2번 이상 사용하셨나요? 자료 처리에 오류가 발생했습니다.\n 적합한 형태로 입력해 주세요." } } ],
                              "quickReplies": [
-                                            {"label": "그만하기", "action": "message", "messageText": "끝내기"},
+                                            {"label": "취소", "action": "message", "messageText": "취소"},
                                             {"label": "다시 등록", "action": "message", "messageText": "수행평가 등록/선택"}]
                             }
                        }
@@ -418,13 +398,13 @@ def message():
         behave = 0
 
     elif behave == 7:
-        banlist = content.split(".")
+        banlist = content.split("/")
         if (len(banlist) != 3) or (banlist[1] not in ["1","2","3","4","5","6","7","8","9","10"]) or(banlist[0] not in ["1","2","3"]):
             response = {
                 "version": "2.0",
-                "template": {"outputs": [{"simpleText": {"text": "혹시 . 을 3번 이상 사용하셨나요?\n 학반을 정확히 입력하지 않았나요?\n자료 처리에 오류가 발생했습니다.\n 적합한 형태로 입력해 주세요." } } ],
+                "template": {"outputs": [{"simpleText": {"text": "혹시 / 를 3번 이상 사용하셨나요?\n 학반을 정확히 입력하지 않았나요?\n자료 처리에 오류가 발생했습니다.\n 적합한 형태로 입력해 주세요." } } ],
                              "quickReplies": [
-                                            {"label": "그만하기", "action": "message", "messageText": "끝내기"},
+                                            {"label": "취소", "action": "message", "messageText": "취소"},
                                             {"label": "다시 등록", "action": "message", "messageText": "수행평가 등록/반"}]
                             }
                        }
@@ -440,6 +420,48 @@ def message():
                             }
                        }
             behave = 0
+
+    elif behave == 8:
+        panchoice = content.replace(".","").replace("번","")
+        try:
+            pch = int(panchoice)
+            pch2 = pan[pch-1]
+            response = {
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": f"{pch2['name']} / {pch2['user']}"+"\n\n"+f"{pch2['detail']}\n\n연락처 : {pch2['number']}\n등록 날짜 : {pch2['date']}" } } ],
+                             "quickReplies": [
+                                            {"label": "글 그만 보기", "action": "message", "messageText": "끝내기"}]
+                            }
+                       }
+        except:
+            response = {
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": "한글을 섞으면 정상적 출력이 불가합니다. 다시 시도해주세요." } } ],
+                             "quickReplies": [
+                                            {"label": "글 그만 보기", "action": "message", "messageText": "끝내기"}]
+                            }
+                       }
+    elif behave == 9:
+        pansplit = content.split("/")
+        if len(pansplit) == 4:
+            pan.append({'name' : pansplit[0], 'user' : pansplit[1], 'detail' : pansplit[2], 'number' : pansplit[3], 'date' : now.strftime('%Y.%m.%d')})
+            behave = 0
+            response = {
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": "등록되었습니다." } } ],
+                             "quickReplies": [
+                                            {"label": "올라갔는지 확인하기", "action": "message", "messageText": "모집/게시판"}]
+                            }
+                       }
+
+        else:
+            response = {
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": "오류 발생\n1./를 기준으로 데이터를 나눕니다. /은 꼭 3번만 사용해 주세요.\n2.사용자가 많아 생기는 오류일 수 있습니다. 다시 입력해 보시고 또 오류 발생시 상담원에게 연락해 주세요." } } ],
+                             "quickReplies": [
+                                            {"label": "취소", "action": "message", "messageText": "취소"}]
+                            }
+                       }
 
 
     elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
@@ -495,8 +517,10 @@ def message():
                     "template": {"outputs": [{"simpleText": {"text": 
 f"""수행평가 등록을 원하는 과목 이름을 짧게(화학1->화1, 정치와 법->정법) 입력해 주세요.
 학년이 끝나거나 학기가 끝나면 데이터는 초기화 될 수 있습니다. 데이터 입력 시 내용과 기한을 입력해주세요.
-. 사용 시 오류가 발생할 수 있습니다. 과목과 내용을 끊을 때만 .을 사용해 주세요.
-예>화학.교과서 검사/ 1월 1일
+과도한 / 사용 시 오류가 발생할 수 있습니다. 과목과 내용을 끊을 때만 /을 사용해 주세요.
+
+예>화학/교과서 검사 1월 1일까지
+
 주의사항 : 자체적으로 데이터 삭제가 불가합니다. 삭제 필요시 상담원 전달해주세요.
 
 현재 과목: {choice.keys()}"""} } ],
@@ -511,8 +535,10 @@ f"""수행평가 등록을 원하는 과목 이름을 짧게(화학1->화1, 정�
                     "template": {"outputs": [{"simpleText": {"text": 
 f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 -> 3.1) 입력해 주세요.
 학년이 끝나거나 학기가 끝나면 데이터는 초기화 될 수 있습니다. 데이터 입력 시 내용과 기한을 입력해주세요.
-. 사용 시 오류가 발생할 수 있습니다. 학년, 반과 내용을 끊을 때만 .을 사용해 주세요.
-예>3.1.리로스쿨 보고서/n월 n일까지
+과도한 / 사용 시 오류가 발생할 수 있습니다. 학년, 반과 내용을 끊을 때만 /을 사용해 주세요.
+
+예>3/1/리로스쿨 보고서 n월 n일까지
+
 주의사항 : 자체적으로 데이터 삭제가 불가합니다. 삭제 필요시 상담원 전달해주세요.
 """} } ],
                                   "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}]
@@ -520,31 +546,36 @@ f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 ->
                    }
         behave = 7
 
-    elif content == "/저장":
-        alldata = {
-            "choice": choice,
-            "homeworkdata": homeworkdata,
-            "fillter": fillter
-                 }
-        with open("/workspace/text/data.json", "w") as f:
-            json.dump(alldata, f)
+    elif content == "모집/게시판":
+        PanLoading()
         response = {
-            "version": "2.0",
-            "template": {
-                "outputs": [{"simpleText": {"text": f"데이터 저장완료"}}]
-            }
-        }
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": f"{panResult}" +"\n\n 게시글 번호를 입력하면 해당 게시글을 볼 수 있습니다.\n취소하기 전까지 게시글 선택은 유지됩니다."} } ],
+                             "quickReplies": [
+                                            {"label": "취소", "action": "message", "messageText": "취소"}]
+                            }
+                       }
+        behave = 8
 
-    elif content == "/로드":
-        with open("/workspace/text/data.json", "r") as f:
-            alldata = json.load(f)
-        choice = alldata["choice"]
-        homeworkdata = alldata["homeworkdata"]
-        fillter = alldata["fillter"]
+    elif content == "모집/공고":
+        response = {
+                "version": "2.0",
+                "template": {"outputs": [{"simpleText": {"text": 
+f"""모집 공고를 올립니다. 번호는 선착순으로 지정되며, 약 6개월이 지난 경우 관리자 재량으로 삭제될 수 있습니다.\n
+입력 형태 -> 제목/이름/내용/연락처\n
+예시-> 홍길동/학생회 인원 모집합니다!/학생회 XX부서에 지원할 학생을 모집합니다. ~같은 활동을 합니다. 아래로 연락주세요!/123-1234-1234
+취소를 누르거나 공고 등록되기 전까지 이 선택은 유지됩니다."""} } ],
+                             "quickReplies": [
+                                            {"label": "취소", "action": "message", "messageText": "취소"}]
+                            }
+                       }
+        behave = 9
+
+    elif content == "출력":
         response = {
             "version": "2.0",
             "template": {
-                "outputs": [{"simpleText": {"text": f"데이터 로드완료"}}]
+                "outputs": [{"simpleText": {"text": f"choice = {choice}\n\n pan = {pan}\n\n homeworkdata = {homeworkdata}\n\n fillter = {fillter}"}}]
             }
         }
 
@@ -570,9 +601,9 @@ f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 ->
                             }]
                             }
                   }
-
     return jsonify(response)
 
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000, debug=True)
+
