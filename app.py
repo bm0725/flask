@@ -200,6 +200,8 @@ fillter = {
     "3": {"0": [0, 0, "선택과목 B", 0, 0, "선택과목 A", "선택과목 C"], "1": [0, "선택과목 A", "선택과목 C", 0, 0, "선택과목 B", 0], "2": [0, 0, 0, 0, 0, 0, "선택과목 B"], "3": ["선택과목 B", 0, 0, 0, 0, "선택과목 A", "선택과목 C"], "4": [0, 0, "선택과목 A", "선택과목 C", 0, 0, 0]}
             }
 
+idlog = {} #id마다의 행동을 저장해둘 딕셔너리.
+
 @app.route('/keyboard')
 
 
@@ -211,7 +213,7 @@ def Keyboard():
 def message():
 
     global mealDay, behave, now, schedule, MenuURL, classpos, menu, editbehave, response, choiceban, userdata, loginBehave
-    global homeworkdata, fillter, banSchedule, alldata, choice, pan
+    global homeworkdata, fillter, banSchedule, alldata, choice, pan, idlog, ID
 
     now = datetime.datetime.now()
     now = now + datetime.timedelta(hours=9)
@@ -219,11 +221,13 @@ def message():
 
     dataReceive = request.get_json()
     content = dataReceive['userRequest']['utterance']
-    # ID = dataReceive['userRequest']['user']['id']
-    # print(ID)
+    ID = dataReceive['userRequest']['user']['id']
+    if ID not in idlog: #아이디 미등록. behave를 id마다 다르게 지정해 오류 방지
+        idlog[ID] = 0
+    
     print("아래 :", content)
     # print(type(content))
-    print(behave)
+    print(idlog[ID])
 
     if (content == u"취소") or (content == "끝내기"):
         behave = 0
@@ -237,7 +241,7 @@ def message():
                         }
                     }
 
-    elif behave == 1:  # 급식파싱
+    elif idlog[ID] == 1:  # 급식파싱
         if len(content) < 3:  # 월화수목금 오늘 등 시
             Weekday(content)
         else:  # 선텍날짜일때
@@ -245,14 +249,14 @@ def message():
             if len(content) == 4:  # 형식맞추면
                 mealDay = now.strftime("%Y")+content  # 해당급식으로 선택.
             else:
-                behave = 0
+                idlog[ID] = 0
                 response = {"version": "2.0", 
                             "template": {
                                        "outputs": [{"simpleText": {"text": f"형식에 맞춰 주세요. 이번년도 급식 데이터만 가능합니다. ex) 1212 ->12월 12일 급식"}} # 형식안맞으면 취소.
                                                   ]
                                         }
                             }
-        if behave == 1:  # 오류없으면
+        if idlog[ID] == 1:  # 오류없으면
             MenuURL = f"{base_url}mealServiceDietInfo?KEY={KEY}&ATPT_OFCDC_SC_CODE={schulGion}&SD_SCHUL_CODE={schulCode}&MLSV_YMD={mealDay}&Type=json"
             ParsingMenu(MenuURL)
             if menu == "급식없음":  # 급식없으면
@@ -273,11 +277,11 @@ def message():
                                                 {"label": "다시 하기", "action": "message", "messageText": "급식 재출력"}]
                                  }
                            }
-        behave = 0
+        idlog[ID] = 0
         menu = ""
         mealDay = "0"
 
-    elif behave == 2:  # 학년 월 순 데이터, 학사일정 파싱
+    elif idlog[ID] == 2:  # 학년 월 순 데이터, 학사일정 파싱
         content = content.replace("월", "").replace("학년", "").replace(",", ".")
         a1 = content.split(".")
         if len(a1) == 1:
@@ -309,10 +313,10 @@ def message():
                                             {"label": "다시 하기", "action": "message", "messageText": "학사일정 재출력"}]
                             }
                        }
-        behave = 0
+        idlog[ID] = 0
         schedule = ""
 
-    elif behave == 3:
+    elif idlog[ID] == 3:
         if (content not in choice) or (len(choice[content])) == 0:
             response = {
                 "version": "2.0",
@@ -331,9 +335,9 @@ def message():
                                             {"label": "다른과목 확인", "action": "message", "messageText": "수행평가 확인/선택"}]
                             }
                        }
-        behave = 0
+        idlog[ID] = 0
 
-    elif behave == 4:
+    elif idlog[ID] == 4:
         choban = content.replace(",",".").replace(" ","").split(".")
         if (len(choban) != 2) or (choban[1] not in ["1","2","3","4","5","6","7","8","9","10"]) or(choban[0] not in ["1","2","3"]):
             response = {
@@ -353,9 +357,9 @@ def message():
                                             {"label": "다른 반 확인", "action": "message", "messageText": "수행평가 확인/반"}]
                             }
                        }
-        behave = 0
+        idlog[ID] = 0
 
-    elif behave == 5:
+    elif idlog[ID] == 5:
         work = content.split("/")
         if len(work) != 2:
             response = {
@@ -377,9 +381,9 @@ def message():
                                             {"label": "다시 등록", "action": "message", "messageText": "수행평가 등록/선택"}]
                             }
                        }
-            behave = 0
+            idlog[ID] = 0
             
-    elif behave == 6:  # 시간표 선택하기
+    elif idlog[ID] == 6:  # 시간표 선택하기
         schlist = content.replace(" ","").replace(",",".").split(".")
         if len(schlist) != 2:
             response = {
@@ -398,9 +402,9 @@ def message():
                            ]
                         }
                    }
-        behave = 0
+        idlog[ID] = 0
 
-    elif behave == 7:
+    elif idlog[ID] == 7:
         banlist = content.split("/")
         if (len(banlist) != 3) or (banlist[1] not in ["1","2","3","4","5","6","7","8","9","10"]) or(banlist[0] not in ["1","2","3"]):
             response = {
@@ -422,9 +426,9 @@ def message():
                                             {"label": "다시 등록", "action": "message", "messageText": "수행평가 등록/반"}]
                             }
                        }
-            behave = 0
+            idlog[ID] = 0
 
-    elif behave == 8:
+    elif idlog[ID] == 8:
         panchoice = content.replace(".","").replace("번","")
         try:
             pch = int(panchoice)
@@ -444,7 +448,8 @@ def message():
                                             {"label": "글 그만 보기", "action": "message", "messageText": "끝내기"}]
                             }
                        }
-    elif behave == 9:
+
+    elif idlog[ID] == 9:
         pansplit = content.split("/")
         if len(pansplit) == 4:
             pan.append({'name' : pansplit[0], 'user' : pansplit[1], 'detail' : pansplit[2], 'number' : pansplit[3], 'date' : now.strftime('%Y.%m.%d')})
@@ -456,6 +461,7 @@ def message():
                                             {"label": "올라갔는지 확인하기", "action": "message", "messageText": "모집/게시판"}]
                             }
                        }
+            idlog[ID] = 0
 
         else:
             response = {
@@ -468,7 +474,7 @@ def message():
 
 
     elif (content in u"시간표") or (content == "시간표") or (content == "시간표 확인하기"):
-        behave = 6
+        idlog[ID] = 6
         response = {
     "version": "2.0",
         "template": {"outputs": [{"simpleText": {"text" : "몇학년 몇반의 이번주 시간표를 보시겠습니까? 2.6 입력시 2학년 6반 시간표가 출력됩니다."}}],
@@ -487,13 +493,13 @@ def message():
                                 {"label": "취소하기", "action": "message", "messageText": "취소"}]
                         }
                    }
-        behave = 2
+        idlog[ID] = 2
 
         # 아래는 급식관련내용
 
     elif (content in ("급식 메뉴" or "급식메뉴")) or (content == "급식 메뉴 확인하기") or (content == "급식 재출력"):
         response = jsonChoiceDay
-        behave = 1
+        idlog[ID] = 1
         # 아래는 수행
 
     elif content == "수행평가 확인/선택":
@@ -503,7 +509,7 @@ def message():
                                   "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}]
                                  }
                    }
-        behave = 3
+        idlog[ID] = 3
     
     elif content == "수행평가 확인/반":
         response = {
@@ -512,7 +518,7 @@ def message():
                                   "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}]
                                  }
                    }
-        behave = 4
+        idlog[ID] = 4
     
     elif content == "수행평가 등록/선택":
         response = {
@@ -530,7 +536,7 @@ f"""수행평가 등록을 원하는 과목 이름을 짧게(화학1->화1, 정�
                                   "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}]
                                  }
                    }
-        behave = 5
+        idlog[ID] = 5
 
     elif content == "수행평가 등록/반":
         response = {
@@ -547,7 +553,7 @@ f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 ->
                                   "quickReplies": [{"label": "취소하기", "action": "message", "messageText": "취소"}]
                                  }
                    }
-        behave = 7
+        idlog[ID] = 7
 
     elif content == "모집/게시판":
         PanLoading()
@@ -558,7 +564,7 @@ f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 ->
                                             {"label": "취소", "action": "message", "messageText": "취소"}]
                             }
                        }
-        behave = 8
+        idlog[ID] = 8
 
     elif content == "모집/공고":
         response = {
@@ -572,7 +578,7 @@ f"""모집 공고를 올립니다. 번호는 선착순으로 지정되며, 약 6
                                             {"label": "취소", "action": "message", "messageText": "취소"}]
                             }
                        }
-        behave = 9
+        idlog[ID] = 9
 
     elif content == "출력":
         response = {
