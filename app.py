@@ -30,7 +30,6 @@ alldata = {}
 
 behave = 0  # 1은 급식파싱, 2 시간표, 6 학사. 345 7 수행. 8 인원 모집
 mealDay = "0"  # 급식파싱할때 쓸 날짜 넣을 변수다.
-editbehave = 0  # 데이터수정. 1은 시간표,2는 강의실, 3은 강의실삭제
 
 schulDate = f"{now.year}.{now.month}.{now.day}"
 
@@ -214,7 +213,7 @@ def Keyboard():
 @app.route('/message', methods=['POST'])
 def message():
 
-    global mealDay, behave, now, schedule, MenuURL, classpos, menu, editbehave, response, choiceban, userdata, loginBehave
+    global mealDay, behave, now, schedule, MenuURL, menu, response
     global homeworkdata, fillter, banSchedule, alldata, choice, pan, idlog, ID
 
     now = datetime.datetime.now()
@@ -232,9 +231,7 @@ def message():
     print(idlog[ID])
 
     if (content == u"취소") or (content == "끝내기"):
-        behave = 0
-        editbehave = 0
-        loginBehave = 0
+        idlog[ID] = 0
         response = {
             "version": "2.0",
             "template": {
@@ -455,7 +452,6 @@ def message():
         pansplit = content.split("/")
         if len(pansplit) == 4:
             pan.append({'name' : pansplit[0], 'user' : pansplit[1], 'detail' : pansplit[2], 'number' : pansplit[3], 'date' : now.strftime('%Y.%m.%d')})
-            behave = 0
             response = {
                 "version": "2.0",
                 "template": {"outputs": [{"simpleText": {"text": "등록되었습니다." } } ],
