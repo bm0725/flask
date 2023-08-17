@@ -150,7 +150,7 @@ def PanLoading():
 
 jsonChoiceDay = {
     "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "날짜를 선택해 주세요. 이번주 해당 요일의 급식이 출력됩니다.\nEX->1207입력시 이번년 12월 07일자 급식출력됨."}}],
+    "template": {"outputs": [{"simpleText": {"text": "날짜를 선택해 주세요. 이번주 해당 요일의 급식이 출력됩니다.\nEX->0807입력시 이번년 8월 7일자 급식 출력됨."}}],
                  "quickReplies": [{"label": "오늘", "action": "message", "messageText": "오늘"},
                                   {"label": "월", "action": "message", "messageText": "월"},
                                   {"label": "화", "action": "message", "messageText": "화"},
@@ -465,7 +465,7 @@ def message():
         else:
             response = {
                 "version": "2.0",
-                "template": {"outputs": [{"simpleText": {"text": "오류 발생\n1./를 기준으로 데이터를 나눕니다. /은 꼭 3번만 사용해 주세요.\n2.사용자가 많아 생기는 오류일 수 있습니다. 다시 입력해 보시고 또 오류 발생시 상담원에게 연락해 주세요." } } ],
+                "template": {"outputs": [{"simpleText": {"text": "오류 발생\n/를 기준으로 데이터를 나눕니다. /은 꼭 3번만 사용해 주세요.\n다시 입력해 보시고 또 오류 발생시 상담원에게 연락해 주세요." } } ],
                              "quickReplies": [
                                             {"label": "취소", "action": "message", "messageText": "취소"}]
                             }
@@ -487,7 +487,7 @@ def message():
     elif (content == "학사일정 확인하기") or (content in "학사일정") or (content == "학사일정 재출력"):  # 학사일정 파싱시작. 몇달치 가져올건지 물어봄
         response = {
             "version": "2.0",
-            "template": {"outputs": [{"simpleText": {"text": "원하는 학년과 월을 선택해주세요. ex)2,3->2학년 3월 학사일정.\n선택을 원하지 않을 경우 학년을 입력하지 마세요. ex)4->4월 학사일정"}}],
+            "template": {"outputs": [{"simpleText": {"text": "원하는 학년과 월을 선택해주세요. ex)2.3->2학년 3월 학사일정.\n선택을 원하지 않을 경우 학년을 입력하지 마세요. ex)4->4월 학사일정"}}],
                           "quickReplies": [
                                 {"label": "취소하기", "action": "message", "messageText": "취소"}]
                         }
@@ -541,7 +541,7 @@ f"""수행평가 등록을 원하는 과목 이름을 짧게(화학1->화1, 정�
         response = {
                     "version": "2.0",
                     "template": {"outputs": [{"simpleText": {"text": 
-f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 -> 3.1) 입력해 주세요.
+f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 -> 3/1) 입력해 주세요.
 학년이 끝나거나 학기가 끝나면 데이터는 초기화 될 수 있습니다. 데이터 입력 시 내용과 기한을 입력해주세요.
 과도한 / 사용 시 오류가 발생할 수 있습니다. 학년, 반과 내용을 끊을 때만 /을 사용해 주세요.
 
@@ -569,7 +569,7 @@ f"""수행평가 등록을 원하는 학년/반 이름을 짧게(3학년 1반 ->
         response = {
                 "version": "2.0",
                 "template": {"outputs": [{"simpleText": {"text": 
-f"""모집 공고를 올립니다. 번호는 선착순으로 지정되며, 약 6개월이 지난 경우 관리자 재량으로 삭제될 수 있습니다.\n
+f"""모집 공고를 올립니다. 번호는 선착순으로 지정되며, 학기마다 관리자 재량으로 삭제될 수 있습니다.\n
 입력 형태 -> 제목/이름/내용/연락처\n
 예시-> 홍길동/학생회 인원 모집합니다!/학생회 XX부서에 지원할 학생을 모집합니다. ~같은 활동을 합니다. 아래로 연락주세요!/123-1234-1234
 취소를 누르거나 공고 등록되기 전까지 이 선택은 유지됩니다."""} } ],
