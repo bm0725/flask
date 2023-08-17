@@ -51,7 +51,7 @@ def ParsingMenu(url):   # 함수. URL넣으면 나이스api에서 급식 파싱�
         treat = basemenu["mealServiceDietInfo"][1]["row"] #처리할부분만
         for i in range(0, len(treat)):
             menus = basemenu["mealServiceDietInfo"][1]["row"][i]
-            menu += f"\n{menus['MMEAL_SC_NM']}\n\n" + "\n".join(menus['DDISH_NM'].split(" ")) + f"\n칼로리 : {menus[CAL_INFO]}"  #순서대로 식사 일정, 메뉴, 칼로리
+            menu += f"\n{menus['MMEAL_SC_NM']}\n\n" + "\n".join(menus['DDISH_NM'].split(" ")) + f"\n칼로리 : {menus['CAL_INFO']}"  #순서대로 식사 일정, 메뉴, 칼로리
     return menu
 
 def ParsingSchedule(grade, month):  # 나이스 api 학사일정 가져오기
