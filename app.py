@@ -109,7 +109,7 @@ def ParsingBanSchedule(grade, ban):  # 학년, 반순서 데이터입력.   <-�
         soup = BeautifulSoup(res.text, 'html.parser')
         schedule = soup.get_text()
         schedule = json.loads(schedule)
-        if schedule not in hisTimetable:
+        if 'hisTimetable' not in schedule:
             allschedule.append([])
         else:
             schedule = schedule['hisTimetable'][1]['row']
