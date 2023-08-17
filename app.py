@@ -111,17 +111,20 @@ def ParsingBanSchedule(grade, ban):  # 학년, 반순서 데이터입력.   <-�
         soup = BeautifulSoup(res.text, 'html.parser')
         schedule = soup.get_text()
         schedule = json.loads(schedule)
-        schedule = schedule['hisTimetable'][1]['row']
-        allschedule.append([schedule[i]['ITRT_CNTNT'] for i in range(len(schedule))])  # 한줄반복문으로 과목다떼옴
+        if schedule not in hisTimetable:
+            allschedule.append([])
+        else:
+            schedule = schedule['hisTimetable'][1]['row']
+            allschedule.append([schedule[i]['ITRT_CNTNT'] for i in range(len(schedule))])  # 한줄반복문으로 과목다떼옴
     print(allschedule)
     if len(allschedule) > 2:
         allschedule[2].insert(3, "예배")  # 예배는 나이스 시간표에 존재하지 않음
     # print(allschedule)
     for z in range(0,5):  # 시험 등 상황시 오류방지
         if z >= len(allschedule):  # 뭔가 오류나서 시간표 짤린경우
-            allschedule.append(["특수", "특수", "특수", "특수", "특수", "이 시간표는 시험과 같은 예외상황에서 나타납니다.", "이 시간표는 시험과 같은 예외상황에서 나타납니다."])
+            allschedule.append(["특수", "특수", "특수", "특수", "시간표를 제대로 불러오지 못했습니다.", "nice에 시간표가 없을 수 있습니다.", "정상 시간표보다 수업시간 수가 적을 수 있습니다."])
         elif len(allschedule[z]) != 7:  #  시험처럼 시간수 줄어든경우
-            allschedule[z] = ["특수", "특수", "특수", "특수", "특수", "이 시간표는 시험과 같은 예외상황에서 나타납니다.", "이 시간표는 시험과 같은 예외상황에서 나타납니다."]
+            allschedule[z] = ["특수", "특수", "특수", "특수", "시간표를 제대로 불러오지 못했습니다.", "nice에 시간표가 없을 수 있습니다.", "정상 시간표보다 수업시간 수가 적을 수 있습니다."]
 
     for x in range(0,5):
         banSchedule += "\n".join(f"{allschedule[x][y]}" if fillter[grade][str(x)][y] == 0 else f"{fillter[grade][str(x)][y]}" for y in range(0,7))  # test에 있는 고정시간표로 덮기, 텍스트화
